@@ -466,10 +466,48 @@
       margin-bottom: 14px;
     }
 
+    .owner-filters {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
     .owner-count {
       color: rgba(255, 255, 255, 0.74);
       font-size: 0.9rem;
       font-weight: 800;
+    }
+
+    .owner-date-search {
+      display: grid;
+      gap: 7px;
+    }
+
+    .owner-date-search label {
+      color: rgba(255, 255, 255, 0.62);
+      font-family: "Sora", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .owner-date-search input {
+      width: 190px;
+      min-height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.08);
+      font: 800 0.88rem "DM Sans", sans-serif;
+      padding: 0 16px;
+      outline: none;
+    }
+
+    .owner-date-search input:focus {
+      border-color: rgba(247, 214, 107, 0.75);
+      box-shadow: 0 0 0 3px rgba(247, 214, 107, 0.14);
     }
 
     .owner-table-wrap {
@@ -508,6 +546,23 @@
 
     .owner-table td {
       color: rgba(255, 255, 255, 0.76);
+    }
+
+    .owner-delete {
+      min-height: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      color: var(--gold-300);
+      background: rgba(255, 255, 255, 0.07);
+      cursor: pointer;
+      font: 800 0.78rem "DM Sans", sans-serif;
+      padding: 0 12px;
+      transition: var(--transition);
+    }
+
+    .owner-delete:hover {
+      border-color: rgba(247, 214, 107, 0.55);
+      background: rgba(232, 185, 63, 0.14);
     }
 
     .owner-empty {
@@ -1797,7 +1852,7 @@
     <a href="#ranking" onclick="closeMobileMenu()">Ranking</a>
     <a href="#feedback" onclick="closeMobileMenu()">Feedback</a>
     <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
-    <a href="#" onclick="openAuthModal('signup'); closeMobileMenu(); return false;">Inscribirme</a>
+    <a href="#" onclick="openAuthModal('signup'); closeMobileMenu(); return false;">Referir</a>
   </div>
 
   <nav id="navbar">
@@ -1810,7 +1865,7 @@
       <li><a href="#merch">Merch</a></li>
       <li><a href="#ranking">Ranking</a></li>
       <li><a href="#feedback">Feedback</a></li>
-      <li><a href="#" onclick="openAuthModal('signup'); return false;" class="nav-cta"><span class="btn-icon">+</span> Inscribirme</a></li>
+      <li><a href="#" onclick="openAuthModal('signup'); return false;" class="nav-cta"><span class="btn-icon">+</span> Referir</a></li>
     </ul>
     <button class="hamburger" type="button" onclick="openMobileMenu()" aria-label="Abrir menú">
       <span></span>
@@ -1825,7 +1880,7 @@
       <div class="auth-header">
         <img src="assets/olon-mark.png" alt="Logo Olon" />
         <h2 id="authTitle">Acceso Olon Society</h2>
-        <p>Regístrate para recibir tu código de referido o entra como owner para ver los registros.</p>
+        <p>Regístrate para recibir tu código de referido y poder recibir 40% de la venta.</p>
       </div>
 
       <div class="auth-tabs" role="tablist">
@@ -1880,7 +1935,13 @@
 
         <section class="auth-panel" id="ownerDashboard">
           <div class="owner-tools">
-            <div class="owner-count" id="ownerCount">0 registrados</div>
+            <div class="owner-filters">
+              <div class="owner-count" id="ownerCount">0 registrados</div>
+              <div class="owner-date-search">
+                <label for="ownerDateSearch">Buscar por fecha</label>
+                <input id="ownerDateSearch" type="date" onchange="renderOwnerDashboard()" />
+              </div>
+            </div>
             <button class="btn-dark" type="button" onclick="downloadOwnerCsv()">Exportar CSV</button>
           </div>
           <div class="owner-table-wrap" id="ownerTableWrap"></div>
@@ -2255,6 +2316,7 @@
     const ownerEmail = "infolonsocietyacademy@gmail.com";
     let activeReferral = null;
     let ownerSignedIn = false;
+    let ownerMembersCache = [];
 
     window.addEventListener("scroll", () => {
       navbar.classList.toggle("scrolled", window.scrollY > 36);
@@ -2308,7 +2370,14 @@
 
     function requireSupabase(messageEl) {
       if (isSupabaseReady) return true;
-      messageEl.textContent = "Falta configurar Supabase. Pega tu URL y anon key en supabase-config.js.";
+      const missingConfig = !supabaseConfig.url ||
+        !supabaseConfig.anonKey ||
+        supabaseConfig.url.includes("PASTE_") ||
+        supabaseConfig.anonKey.includes("PASTE_");
+
+      messageEl.textContent = missingConfig
+        ? "Falta configurar Supabase. Pega tu URL y anon key en supabase-config.js."
+        : "No se pudo cargar Supabase. Refresca con Ctrl + F5 y verifica que el navegador tenga internet.";
       return false;
     }
 
@@ -2362,11 +2431,25 @@
       }).format(new Date(dateValue));
     }
 
+    function formatDateKey(dateValue) {
+      const date = new Date(dateValue);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function getFilteredOwnerMembers(members = ownerMembersCache) {
+      const selectedDate = document.getElementById("ownerDateSearch")?.value;
+      if (!selectedDate) return members;
+      return members.filter((member) => formatDateKey(member.created_at) === selectedDate);
+    }
+
     async function fetchMembers() {
       if (!supabaseClient) return [];
       const { data, error } = await supabaseClient
         .from("referrals")
-        .select("name,email,phone,code,created_at")
+        .select("id,name,email,phone,code,created_at")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -2380,20 +2463,30 @@
       let members = [];
       try {
         members = await fetchMembers();
+        ownerMembersCache = members;
       } catch (error) {
         document.getElementById("ownerCount").textContent = "Error al cargar";
         wrap.innerHTML = `<div class="owner-empty">${escapeHtml(error.message || "No se pudieron cargar los registros.")}</div>`;
         return;
       }
 
-      document.getElementById("ownerCount").textContent = `${members.length} registrados`;
+      const filteredMembers = getFilteredOwnerMembers(members);
+      const selectedDate = document.getElementById("ownerDateSearch").value;
+      document.getElementById("ownerCount").textContent = selectedDate
+        ? `${filteredMembers.length} de ${members.length} registrados`
+        : `${members.length} registrados`;
 
       if (!members.length) {
-        wrap.innerHTML = '<div class="owner-empty">Todavía no hay registros en este navegador.</div>';
+        wrap.innerHTML = '<div class="owner-empty">Todavía no hay registros.</div>';
         return;
       }
 
-      const rows = members
+      if (!filteredMembers.length) {
+        wrap.innerHTML = '<div class="owner-empty">No hay registros para esa fecha.</div>';
+        return;
+      }
+
+      const rows = filteredMembers
         .map((member) => `
           <tr>
             <td>${escapeHtml(member.name)}</td>
@@ -2401,6 +2494,7 @@
             <td>${escapeHtml(member.phone || "-")}</td>
             <td><strong>${escapeHtml(member.code)}</strong></td>
             <td>${escapeHtml(formatDate(member.created_at))}</td>
+            <td><button class="owner-delete" type="button" onclick="deleteMember('${escapeHtml(member.id)}')">Eliminar</button></td>
           </tr>
         `)
         .join("");
@@ -2414,6 +2508,7 @@
               <th>Teléfono</th>
               <th>Código</th>
               <th>Registro</th>
+              <th>Acción</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
@@ -2429,6 +2524,7 @@
         alert(error.message || "No se pudieron exportar los registros.");
         return;
       }
+      members = getFilteredOwnerMembers(members);
       const header = ["Nombre", "Email", "Telefono", "Codigo", "Registro"];
       const csvRows = members.map((member) => [
         member.name,
@@ -2449,6 +2545,23 @@
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
+    }
+
+    async function deleteMember(memberId) {
+      if (!memberId || !supabaseClient) return;
+      if (!confirm("¿Eliminar este registro?")) return;
+
+      const { error } = await supabaseClient
+        .from("referrals")
+        .delete()
+        .eq("id", memberId);
+
+      if (error) {
+        alert(error.message || "No se pudo eliminar el registro.");
+        return;
+      }
+
+      renderOwnerDashboard();
     }
 
     function openLightbox(src) {
