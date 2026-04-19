@@ -11,6 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet" />
+  <script src="supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -2239,9 +2241,18 @@
     const authModal = document.getElementById("authModal");
     const lightbox = document.getElementById("lightbox");
     const lightboxImage = document.getElementById("lightboxImage");
-    const membersKey = "olonSocietyReferralMembers";
+    const supabaseConfig = window.OLON_SUPABASE || {};
+    const isSupabaseReady = Boolean(
+      supabaseConfig.url &&
+      supabaseConfig.anonKey &&
+      !supabaseConfig.url.includes("PASTE_") &&
+      !supabaseConfig.anonKey.includes("PASTE_") &&
+      window.supabase
+    );
+    const supabaseClient = isSupabaseReady
+      ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
+      : null;
     const ownerEmail = "infolonsocietyacademy@gmail.com";
-    const ownerPassword = "nolofx";
     let activeReferral = null;
     let ownerSignedIn = false;
 
@@ -2283,20 +2294,7 @@
       if (tab === "owner" && ownerSignedIn) renderOwnerDashboard();
     }
 
-    function getMembers() {
-      try {
-        const stored = JSON.parse(localStorage.getItem(membersKey) || "[]");
-        return Array.isArray(stored) ? stored : [];
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function saveMembers(members) {
-      localStorage.setItem(membersKey, JSON.stringify(members));
-    }
-
-    function makeReferralCode(name, members) {
+    function makeReferralCode(name) {
       const initials = name
         .trim()
         .split(/\s+/)
@@ -2304,17 +2302,14 @@
         .map((part) => part.charAt(0).toUpperCase())
         .join("") || "OS";
 
-      let code = "";
-      do {
-        const random = Math.random().toString(36).slice(2, 6).toUpperCase();
-        code = `OLON-${initials}${random}`;
-      } while (members.some((member) => member.code === code));
-
-      return code;
+      const random = Math.random().toString(36).slice(2, 7).toUpperCase();
+      return `OLON-${initials}${random}`;
     }
 
-    function normalizeText(value) {
-      return value.trim().toLowerCase();
+    function requireSupabase(messageEl) {
+      if (isSupabaseReady) return true;
+      messageEl.textContent = "Falta configurar Supabase. Pega tu URL y anon key en supabase-config.js.";
+      return false;
     }
 
     function escapeHtml(value) {
@@ -2367,9 +2362,30 @@
       }).format(new Date(dateValue));
     }
 
-    function renderOwnerDashboard() {
-      const members = getMembers();
+    async function fetchMembers() {
+      if (!supabaseClient) return [];
+      const { data, error } = await supabaseClient
+        .from("referrals")
+        .select("name,email,phone,code,created_at")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      return data || [];
+    }
+
+    async function renderOwnerDashboard() {
       const wrap = document.getElementById("ownerTableWrap");
+      wrap.innerHTML = '<div class="owner-empty">Cargando registros...</div>';
+
+      let members = [];
+      try {
+        members = await fetchMembers();
+      } catch (error) {
+        document.getElementById("ownerCount").textContent = "Error al cargar";
+        wrap.innerHTML = `<div class="owner-empty">${escapeHtml(error.message || "No se pudieron cargar los registros.")}</div>`;
+        return;
+      }
+
       document.getElementById("ownerCount").textContent = `${members.length} registrados`;
 
       if (!members.length) {
@@ -2384,7 +2400,7 @@
             <td>${escapeHtml(member.email)}</td>
             <td>${escapeHtml(member.phone || "-")}</td>
             <td><strong>${escapeHtml(member.code)}</strong></td>
-            <td>${escapeHtml(formatDate(member.createdAt))}</td>
+            <td>${escapeHtml(formatDate(member.created_at))}</td>
           </tr>
         `)
         .join("");
@@ -2405,15 +2421,21 @@
       `;
     }
 
-    function downloadOwnerCsv() {
-      const members = getMembers();
+    async function downloadOwnerCsv() {
+      let members = [];
+      try {
+        members = await fetchMembers();
+      } catch (error) {
+        alert(error.message || "No se pudieron exportar los registros.");
+        return;
+      }
       const header = ["Nombre", "Email", "Telefono", "Codigo", "Registro"];
       const csvRows = members.map((member) => [
         member.name,
         member.email,
         member.phone || "",
         member.code,
-        member.createdAt
+        member.created_at
       ]);
       const csv = [header, ...csvRows]
         .map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(","))
@@ -2454,48 +2476,81 @@
       }
     });
 
-    document.getElementById("signupForm").addEventListener("submit", (event) => {
+    async function createReferral(name, email, phone) {
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const member = {
+          name,
+          email,
+          phone: phone || null,
+          code: makeReferralCode(name),
+          created_at: new Date().toISOString()
+        };
+
+        const { error } = await supabaseClient
+          .from("referrals")
+          .insert({
+            name: member.name,
+            email: member.email,
+            phone: member.phone,
+            code: member.code
+          });
+
+        if (!error) return member;
+
+        const errorText = `${error.message || ""} ${error.details || ""}`.toLowerCase();
+        if (error.code === "23505" && errorText.includes("code")) continue;
+        if (error.code === "23505" && errorText.includes("email")) {
+          throw new Error("Ese email ya está registrado. Si necesitas tu código, escríbenos por WhatsApp.");
+        }
+
+        throw error;
+      }
+
+      throw new Error("No se pudo generar un código único. Intenta otra vez.");
+    }
+
+    document.getElementById("signupForm").addEventListener("submit", async (event) => {
       event.preventDefault();
       const name = document.getElementById("memberName").value.trim();
       const email = document.getElementById("memberEmail").value.trim();
       const phone = document.getElementById("memberPhone").value.trim();
       const messageEl = document.getElementById("signupMessage");
 
+      if (!requireSupabase(messageEl)) return;
+
       if (!name || !email) {
         messageEl.textContent = "Completa nombre y email para crear tu código.";
         return;
       }
 
-      const members = getMembers();
-      const existing = members.find((member) => normalizeText(member.email) === normalizeText(email));
+      messageEl.textContent = "Creando código...";
 
-      if (existing) {
-        showReferral(existing, true);
-        return;
+      try {
+        const member = await createReferral(name, email, phone);
+        showReferral(member);
+        event.target.reset();
+      } catch (error) {
+        messageEl.textContent = error.message || "No se pudo crear el registro. Intenta otra vez.";
       }
-
-      const member = {
-        id: window.crypto && typeof window.crypto.randomUUID === "function" ? window.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        name,
-        email,
-        phone,
-        code: makeReferralCode(name, members),
-        createdAt: new Date().toISOString()
-      };
-
-      members.unshift(member);
-      saveMembers(members);
-      showReferral(member);
-      event.target.reset();
     });
 
-    document.getElementById("ownerLoginForm").addEventListener("submit", (event) => {
+    document.getElementById("ownerLoginForm").addEventListener("submit", async (event) => {
       event.preventDefault();
       const email = document.getElementById("ownerEmail").value.trim().toLowerCase();
       const password = document.getElementById("ownerPassword").value;
       const messageEl = document.getElementById("ownerMessage");
 
-      if (email === ownerEmail && password === ownerPassword) {
+      if (!requireSupabase(messageEl)) return;
+
+      if (email !== ownerEmail) {
+        messageEl.textContent = "Este acceso es solo para el owner.";
+        return;
+      }
+
+      messageEl.textContent = "Entrando...";
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+      if (!error) {
         ownerSignedIn = true;
         messageEl.textContent = "";
         event.target.reset();
@@ -2503,7 +2558,7 @@
         return;
       }
 
-      messageEl.textContent = "Email o password incorrecto.";
+      messageEl.textContent = "Email o password incorrecto, o el usuario owner no existe en Supabase Auth.";
     });
 
     const reveals = document.querySelectorAll(".reveal");
