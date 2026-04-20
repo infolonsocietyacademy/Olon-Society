@@ -1426,6 +1426,12 @@
       border-color: rgba(255, 255, 255, 0.1);
       background: rgba(255, 255, 255, 0.08);
       box-shadow: none;
+      cursor: pointer;
+    }
+
+    .club-card:focus-visible {
+      outline: 3px solid rgba(247, 214, 107, 0.75);
+      outline-offset: 4px;
     }
 
     .club-card strong {
@@ -1440,6 +1446,38 @@
       color: rgba(255, 255, 255, 0.67);
       font-size: 0.88rem;
       line-height: 1.5;
+    }
+
+    .club-card .club-action {
+      display: inline-flex;
+      margin-top: 16px;
+      color: var(--gold-300);
+      font-family: "Sora", sans-serif;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .club-modal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      grid-column: 1 / -1;
+    }
+
+    .club-modal-grid .showcase-member {
+      margin: 0;
+    }
+
+    .club-modal-empty {
+      grid-column: 1 / -1;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      color: rgba(255, 255, 255, 0.68);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.07);
     }
 
     .showcase-members {
@@ -1991,6 +2029,7 @@
       .plans-grid,
       .badges-grid,
       .clubs-grid,
+      .club-modal-grid,
       .owner-community-form,
       .feedback-track,
       .price-row {
@@ -2215,6 +2254,20 @@
     </div>
   </div>
 
+  <div class="auth-modal" id="clubModal" aria-hidden="true">
+    <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="clubModalTitle">
+      <button class="auth-close" type="button" onclick="closeClubModal()" aria-label="Cerrar">&times;</button>
+      <div class="auth-header">
+        <img src="assets/olon-mark.png" alt="Logo Olon" />
+        <h2 id="clubModalTitle">Club</h2>
+        <p id="clubModalSubtitle">Miembros reconocidos dentro de este nivel.</p>
+      </div>
+      <div class="auth-body">
+        <div class="club-modal-grid" id="clubModalMembers"></div>
+      </div>
+    </div>
+  </div>
+
   <section id="hero">
     <div class="hero-content">
       <img src="assets/olon-logo.png" class="hero-logo" alt="Olon Society Academy" />
@@ -2423,14 +2476,14 @@
           <p>Descubre el progreso real de nuestra comunidad. Estos son los niveles que reconocen a los traders que han alcanzado nuevas metas dentro de la academia.</p>
         </div>
         <div class="clubs-grid">
-          <article class="club-card reveal delay-1"><strong>Club 1K</strong><span>Primeros $1,000 en el mercado.</span><div class="showcase-members" data-entry-list="club_1k"></div></article>
-          <article class="club-card reveal delay-1"><strong>Club 5K</strong><span>Consistencia en crecimiento con ganancias de $5,000.</span><div class="showcase-members" data-entry-list="club_5k"></div></article>
-          <article class="club-card reveal delay-2"><strong>Club 10K</strong><span>Nivel intermedio con dominio del riesgo y ejecución.</span><div class="showcase-members" data-entry-list="club_10k"></div></article>
-          <article class="club-card reveal delay-2"><strong>Club 50K</strong><span>Traders avanzados con resultados sólidos.</span><div class="showcase-members" data-entry-list="club_50k"></div></article>
-          <article class="club-card reveal delay-3"><strong>Club 100K</strong><span>Disciplina, estrategia comprobada y nivel elite en desarrollo.</span><div class="showcase-members" data-entry-list="club_100k"></div></article>
-          <article class="club-card reveal delay-3"><strong>Club 250K</strong><span>Resultados de alto nivel con mentalidad institucional.</span><div class="showcase-members" data-entry-list="club_250k"></div></article>
-          <article class="club-card reveal delay-4"><strong>Club 500K</strong><span>Traders profesionales con consistencia extrema.</span><div class="showcase-members" data-entry-list="club_500k"></div></article>
-          <article class="club-card reveal delay-4"><strong>Club 1M</strong><span>El nivel más alto: maestría total en el mercado.</span><div class="showcase-members" data-entry-list="club_1m"></div></article>
+          <article class="club-card reveal delay-1" tabindex="0" role="button" onclick="openClubModal('club_1k')" onkeydown="handleClubCardKey(event, 'club_1k')"><strong>Club 1K</strong><span>Primeros $1,000 en el mercado.</span><em class="club-action">Ver miembros</em></article>
+          <article class="club-card reveal delay-1" tabindex="0" role="button" onclick="openClubModal('club_5k')" onkeydown="handleClubCardKey(event, 'club_5k')"><strong>Club 5K</strong><span>Consistencia en crecimiento con ganancias de $5,000.</span><em class="club-action">Ver miembros</em></article>
+          <article class="club-card reveal delay-2" tabindex="0" role="button" onclick="openClubModal('club_10k')" onkeydown="handleClubCardKey(event, 'club_10k')"><strong>Club 10K</strong><span>Nivel intermedio con dominio del riesgo y ejecución.</span><em class="club-action">Ver miembros</em></article>
+          <article class="club-card reveal delay-2" tabindex="0" role="button" onclick="openClubModal('club_50k')" onkeydown="handleClubCardKey(event, 'club_50k')"><strong>Club 50K</strong><span>Traders avanzados con resultados sólidos.</span><em class="club-action">Ver miembros</em></article>
+          <article class="club-card reveal delay-3" tabindex="0" role="button" onclick="openClubModal('club_100k')" onkeydown="handleClubCardKey(event, 'club_100k')"><strong>Club 100K</strong><span>Disciplina, estrategia comprobada y nivel elite en desarrollo.</span><em class="club-action">Ver miembros</em></article>
+          <article class="club-card reveal delay-3" tabindex="0" role="button" onclick="openClubModal('club_250k')" onkeydown="handleClubCardKey(event, 'club_250k')"><strong>Club 250K</strong><span>Resultados de alto nivel con mentalidad institucional.</span><em class="club-action">Ver miembros</em></article>
+          <article class="club-card reveal delay-4" tabindex="0" role="button" onclick="openClubModal('club_500k')" onkeydown="handleClubCardKey(event, 'club_500k')"><strong>Club 500K</strong><span>Traders profesionales con consistencia extrema.</span><em class="club-action">Ver miembros</em></article>
+          <article class="club-card reveal delay-4" tabindex="0" role="button" onclick="openClubModal('club_1m')" onkeydown="handleClubCardKey(event, 'club_1m')"><strong>Club 1M</strong><span>El nivel más alto: maestría total en el mercado.</span><em class="club-action">Ver miembros</em></article>
         </div>
       </div>
     </div>
@@ -2593,6 +2646,10 @@
     const navbar = document.getElementById("navbar");
     const mobileMenu = document.getElementById("mobileMenu");
     const authModal = document.getElementById("authModal");
+    const clubModal = document.getElementById("clubModal");
+    const clubModalTitle = document.getElementById("clubModalTitle");
+    const clubModalSubtitle = document.getElementById("clubModalSubtitle");
+    const clubModalMembers = document.getElementById("clubModalMembers");
     const lightbox = document.getElementById("lightbox");
     const lightboxImage = document.getElementById("lightboxImage");
     const supabaseConfig = window.OLON_SUPABASE || {};
@@ -2611,6 +2668,7 @@
     let ownerSignedIn = false;
     let ownerMembersCache = [];
     let communityEntriesCache = [];
+    let activeClubSection = "";
     const communityPhotoBucket = "community-photos";
     const communitySectionLabels = {
       top_1: "Top Trader #1",
@@ -2656,6 +2714,30 @@
       authModal.classList.remove("open");
       authModal.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
+    }
+
+    function openClubModal(section) {
+      const label = getCommunityLabel(section);
+      activeClubSection = section;
+      clubModalTitle.textContent = label;
+      clubModalSubtitle.textContent = "Miembros reconocidos dentro de este nivel.";
+      renderClubModal(section);
+      clubModal.classList.add("open");
+      clubModal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeClubModal() {
+      clubModal.classList.remove("open");
+      clubModal.setAttribute("aria-hidden", "true");
+      activeClubSection = "";
+      document.body.style.overflow = "";
+    }
+
+    function handleClubCardKey(event, section) {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      openClubModal(section);
     }
 
     function switchAuthTab(tab) {
@@ -2708,6 +2790,10 @@
       return communitySectionLabels[section] || "Reconocimiento";
     }
 
+    function isClubSection(section) {
+      return section.startsWith("club_");
+    }
+
     function getCommunityImage(entry) {
       return entry.image_url || "assets/olon-mark.png";
     }
@@ -2723,6 +2809,14 @@
           </div>
         </div>
       `;
+    }
+
+    function renderClubModal(section) {
+      const entries = communityEntriesCache.filter((entry) => entry.section === section);
+
+      clubModalMembers.innerHTML = entries.length
+        ? entries.map(renderShowcaseMember).join("")
+        : `<div class="club-modal-empty">Todavía no hay miembros publicados en ${escapeHtml(getCommunityLabel(section))}.</div>`;
     }
 
     function renderPartnerCard(entry) {
@@ -2745,6 +2839,7 @@
 
       entries.forEach((entry) => {
         if (entry.section === "partner") return;
+        if (isClubSection(entry.section)) return;
         const list = document.querySelector(`[data-entry-list="${entry.section}"]`);
         if (!list) return;
         list.insertAdjacentHTML("beforeend", renderShowcaseMember(entry));
@@ -2806,6 +2901,7 @@
       try {
         communityEntriesCache = await fetchCommunityEntries();
         renderCommunityEntries(communityEntriesCache);
+        if (activeClubSection) renderClubModal(activeClubSection);
         renderOwnerCommunityList();
       } catch (error) {
         if (!options.silent) {
@@ -3060,6 +3156,7 @@
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         closeAuthModal();
+        closeClubModal();
         closeLightbox();
         closeMobileMenu();
       }
