@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet" />
-  <script src="supabase-config.js"></script>
+  <script src="supabase-config.js?v=20260420-1"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after {
@@ -569,6 +569,98 @@
       padding: 22px;
       color: rgba(255, 255, 255, 0.62);
       text-align: center;
+    }
+
+    .owner-community {
+      margin-top: 26px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .owner-community h3 {
+      margin-bottom: 8px;
+      color: var(--white);
+      font-family: "Sora", sans-serif;
+      font-size: 1.05rem;
+    }
+
+    .owner-community p {
+      margin-bottom: 14px;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .owner-community-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .owner-community-form .auth-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .owner-community-form select,
+    .owner-community-form input[type="file"] {
+      min-height: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.08);
+      font: 700 0.92rem "DM Sans", sans-serif;
+      padding: 0 14px;
+      outline: none;
+    }
+
+    .owner-community-form select:focus,
+    .owner-community-form input[type="file"]:focus {
+      border-color: rgba(247, 214, 107, 0.75);
+      box-shadow: 0 0 0 3px rgba(247, 214, 107, 0.14);
+    }
+
+    .owner-community-form select option {
+      color: var(--ink);
+      background: var(--white);
+    }
+
+    .owner-community-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .owner-community-item {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .owner-community-item img {
+      width: 54px;
+      height: 54px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .owner-community-item strong {
+      display: block;
+      color: var(--white);
+      font-family: "Sora", sans-serif;
+      font-size: 0.92rem;
+    }
+
+    .owner-community-item span {
+      display: block;
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 0.78rem;
+      line-height: 1.4;
     }
 
     #hero {
@@ -1350,6 +1442,122 @@
       line-height: 1.5;
     }
 
+    .showcase-members {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .showcase-member {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 58px;
+      padding: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .showcase-member img {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .showcase-member strong {
+      display: block;
+      margin: 0 0 2px;
+      color: var(--white);
+      font-family: "Sora", sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .showcase-member span {
+      display: block;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    #socios {
+      color: var(--white);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(232, 185, 63, 0.16), transparent 34%),
+        linear-gradient(135deg, var(--navy-950), var(--navy-900));
+    }
+
+    #socios .section-title,
+    #socios .section-sub {
+      color: var(--white);
+    }
+
+    #socios .section-sub {
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .partners-empty {
+      grid-column: 1 / -1;
+      padding: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      color: rgba(255, 255, 255, 0.68);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .partner-card {
+      overflow: hidden;
+      border: 1px solid rgba(247, 214, 107, 0.18);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.07);
+      box-shadow: none;
+    }
+
+    .partner-card img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: contain;
+      padding: 20px;
+      background: #020202;
+    }
+
+    .partner-copy {
+      padding: 20px;
+    }
+
+    .partner-copy small {
+      display: inline-flex;
+      margin-bottom: 10px;
+      color: var(--gold-300);
+      font-family: "Sora", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .partner-copy h3 {
+      margin-bottom: 8px;
+      color: var(--white);
+      font-size: 1.25rem;
+    }
+
+    .partner-copy p {
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.55;
+    }
+
     #feedback {
       background: var(--cream);
     }
@@ -1783,9 +1991,18 @@
       .plans-grid,
       .badges-grid,
       .clubs-grid,
+      .owner-community-form,
       .feedback-track,
       .price-row {
         grid-template-columns: 1fr;
+      }
+
+      .owner-community-item {
+        grid-template-columns: 46px minmax(0, 1fr);
+      }
+
+      .owner-community-item .owner-delete {
+        grid-column: 1 / -1;
       }
 
       .metric {
@@ -1854,6 +2071,7 @@
     <a href="#planes" onclick="closeMobileMenu()">Planes</a>
     <a href="#merch" onclick="closeMobileMenu()">Merch</a>
     <a href="#ranking" onclick="closeMobileMenu()">Ranking</a>
+    <a href="#socios" onclick="closeMobileMenu()">Socios</a>
     <a href="#feedback" onclick="closeMobileMenu()">Feedback</a>
     <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
     <a href="#" onclick="openAuthModal('signup'); closeMobileMenu(); return false;">Refiere y Gana</a>
@@ -1868,6 +2086,7 @@
       <li><a href="#planes">Planes</a></li>
       <li><a href="#merch">Merch</a></li>
       <li><a href="#ranking">Ranking</a></li>
+      <li><a href="#socios">Socios</a></li>
       <li><a href="#feedback">Feedback</a></li>
       <li><a href="#" onclick="openAuthModal('signup'); return false;" class="nav-cta"><span class="btn-icon">+</span> Refiere y Gana</a></li>
     </ul>
@@ -1949,6 +2168,48 @@
             <button class="btn-dark" type="button" onclick="downloadOwnerCsv()">Exportar CSV</button>
           </div>
           <div class="owner-table-wrap" id="ownerTableWrap"></div>
+          <div class="owner-community">
+            <h3>Editar reconocimientos</h3>
+            <p>Agrega foto y usuario a Top Trader, clubs o socios de la academia. Las entradas se publican en la web.</p>
+            <form class="owner-community-form" id="communityForm">
+              <div class="auth-field">
+                <label for="communitySection">Sección</label>
+                <select id="communitySection" required>
+                  <option value="top_1">Top Trader #1</option>
+                  <option value="top_2">Top Trader #2</option>
+                  <option value="top_3">Top Trader #3</option>
+                  <option value="consistent">Trader más consistente</option>
+                  <option value="progress">Mejor progreso</option>
+                  <option value="club_1k">Club 1K</option>
+                  <option value="club_5k">Club 5K</option>
+                  <option value="club_10k">Club 10K</option>
+                  <option value="club_50k">Club 50K</option>
+                  <option value="club_100k">Club 100K</option>
+                  <option value="club_250k">Club 250K</option>
+                  <option value="club_500k">Club 500K</option>
+                  <option value="club_1m">Club 1M</option>
+                  <option value="partner">Socio de la Academia</option>
+                </select>
+              </div>
+              <div class="auth-field">
+                <label for="communityName">Usuario / socio</label>
+                <input id="communityName" type="text" placeholder="Nombre visible" required />
+              </div>
+              <div class="auth-field">
+                <label for="communityRole">Líder / detalle</label>
+                <input id="communityRole" type="text" placeholder="Ej. Líder: Jomar Bermúdez" />
+              </div>
+              <div class="auth-field">
+                <label for="communityPhoto">Foto / logo</label>
+                <input id="communityPhoto" type="file" accept="image/png,image/jpeg,image/webp" required />
+              </div>
+              <div class="auth-field full">
+                <button class="btn-primary" type="submit"><span class="btn-icon">+</span> Agregar</button>
+                <p class="auth-message" id="communityMessage"></p>
+              </div>
+            </form>
+            <div class="owner-community-list" id="ownerCommunityList"></div>
+          </div>
         </section>
       </div>
     </div>
@@ -2127,16 +2388,19 @@
           <div class="rank-number">#1</div>
           <h3>Top Trader del Mes</h3>
           <p>El mejor rendimiento del mes. Máxima consistencia, disciplina y ejecución impecable.</p>
+          <div class="showcase-members" data-entry-list="top_1"></div>
         </article>
         <article class="rank-card reveal delay-2">
           <div class="rank-number">#2</div>
           <h3>Alto nivel de precisión</h3>
           <p>Reconocimiento para el trader con crecimiento sólido y decisiones consistentes.</p>
+          <div class="showcase-members" data-entry-list="top_2"></div>
         </article>
         <article class="rank-card reveal delay-3">
           <div class="rank-number">#3</div>
           <h3>Gran evolución</h3>
           <p>Premio al desempeño destacado y progreso dentro del mercado durante el mes.</p>
+          <div class="showcase-members" data-entry-list="top_3"></div>
         </article>
       </div>
 
@@ -2144,10 +2408,12 @@
         <article class="badge-card reveal delay-1">
           <strong>Trader más consistente</strong>
           <p>Mantiene resultados positivos de forma continua y demuestra disciplina operacional.</p>
+          <div class="showcase-members" data-entry-list="consistent"></div>
         </article>
         <article class="badge-card reveal delay-2">
           <strong>Mejor progreso del mes</strong>
           <p>El estudiante con mayor crecimiento, compromiso y evolución dentro de la academia.</p>
+          <div class="showcase-members" data-entry-list="progress"></div>
         </article>
       </div>
 
@@ -2157,15 +2423,38 @@
           <p>Descubre el progreso real de nuestra comunidad. Estos son los niveles que reconocen a los traders que han alcanzado nuevas metas dentro de la academia.</p>
         </div>
         <div class="clubs-grid">
-          <article class="club-card reveal delay-1"><strong>Club 1K</strong><span>Primeros $1,000 en el mercado.</span></article>
-          <article class="club-card reveal delay-1"><strong>Club 5K</strong><span>Consistencia en crecimiento con ganancias de $5,000.</span></article>
-          <article class="club-card reveal delay-2"><strong>Club 10K</strong><span>Nivel intermedio con dominio del riesgo y ejecución.</span></article>
-          <article class="club-card reveal delay-2"><strong>Club 50K</strong><span>Traders avanzados con resultados sólidos.</span></article>
-          <article class="club-card reveal delay-3"><strong>Club 100K</strong><span>Disciplina, estrategia comprobada y nivel elite en desarrollo.</span></article>
-          <article class="club-card reveal delay-3"><strong>Club 250K</strong><span>Resultados de alto nivel con mentalidad institucional.</span></article>
-          <article class="club-card reveal delay-4"><strong>Club 500K</strong><span>Traders profesionales con consistencia extrema.</span></article>
-          <article class="club-card reveal delay-4"><strong>Club 1M</strong><span>El nivel más alto: maestría total en el mercado.</span></article>
+          <article class="club-card reveal delay-1"><strong>Club 1K</strong><span>Primeros $1,000 en el mercado.</span><div class="showcase-members" data-entry-list="club_1k"></div></article>
+          <article class="club-card reveal delay-1"><strong>Club 5K</strong><span>Consistencia en crecimiento con ganancias de $5,000.</span><div class="showcase-members" data-entry-list="club_5k"></div></article>
+          <article class="club-card reveal delay-2"><strong>Club 10K</strong><span>Nivel intermedio con dominio del riesgo y ejecución.</span><div class="showcase-members" data-entry-list="club_10k"></div></article>
+          <article class="club-card reveal delay-2"><strong>Club 50K</strong><span>Traders avanzados con resultados sólidos.</span><div class="showcase-members" data-entry-list="club_50k"></div></article>
+          <article class="club-card reveal delay-3"><strong>Club 100K</strong><span>Disciplina, estrategia comprobada y nivel elite en desarrollo.</span><div class="showcase-members" data-entry-list="club_100k"></div></article>
+          <article class="club-card reveal delay-3"><strong>Club 250K</strong><span>Resultados de alto nivel con mentalidad institucional.</span><div class="showcase-members" data-entry-list="club_250k"></div></article>
+          <article class="club-card reveal delay-4"><strong>Club 500K</strong><span>Traders profesionales con consistencia extrema.</span><div class="showcase-members" data-entry-list="club_500k"></div></article>
+          <article class="club-card reveal delay-4"><strong>Club 1M</strong><span>El nivel más alto: maestría total en el mercado.</span><div class="showcase-members" data-entry-list="club_1m"></div></article>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="socios">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-tag">Socios de la Academia</span>
+        <h2 class="section-title">Alianzas que fortalecen la comunidad</h2>
+        <p class="section-sub">
+          Logos y líderes aliados que forman parte del ecosistema de Olon Society Academy.
+        </p>
+      </div>
+
+      <div class="partners-grid" id="partnersGrid">
+        <article class="partner-card reveal delay-1">
+          <img src="assets/jbs-capital-markets.jpeg" alt="JBS Capital Markets by Olon Society Academy" />
+          <div class="partner-copy">
+            <small>Socio de la Academia</small>
+            <h3>JBS Capital Markets</h3>
+            <p>Líder: Jomar Bermúdez</p>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -2321,6 +2610,24 @@
     let activeReferral = null;
     let ownerSignedIn = false;
     let ownerMembersCache = [];
+    let communityEntriesCache = [];
+    const communityPhotoBucket = "community-photos";
+    const communitySectionLabels = {
+      top_1: "Top Trader #1",
+      top_2: "Top Trader #2",
+      top_3: "Top Trader #3",
+      consistent: "Trader mas consistente",
+      progress: "Mejor progreso",
+      club_1k: "Club 1K",
+      club_5k: "Club 5K",
+      club_10k: "Club 10K",
+      club_50k: "Club 50K",
+      club_100k: "Club 100K",
+      club_250k: "Club 250K",
+      club_500k: "Club 500K",
+      club_1m: "Club 1M",
+      partner: "Socio de la Academia"
+    };
 
     window.addEventListener("scroll", () => {
       navbar.classList.toggle("scrolled", window.scrollY > 36);
@@ -2357,7 +2664,10 @@
       document.getElementById("signupPanel").classList.toggle("active", tab === "signup");
       document.getElementById("ownerPanel").classList.toggle("active", tab === "owner" && !ownerSignedIn);
       document.getElementById("ownerDashboard").classList.toggle("active", tab === "owner" && ownerSignedIn);
-      if (tab === "owner" && ownerSignedIn) renderOwnerDashboard();
+      if (tab === "owner" && ownerSignedIn) {
+        renderOwnerDashboard();
+        loadCommunityEntries();
+      }
     }
 
     function makeReferralCode(name) {
@@ -2392,6 +2702,147 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+    }
+
+    function getCommunityLabel(section) {
+      return communitySectionLabels[section] || "Reconocimiento";
+    }
+
+    function getCommunityImage(entry) {
+      return entry.image_url || "assets/olon-mark.png";
+    }
+
+    function renderShowcaseMember(entry) {
+      const role = entry.role || entry.label || getCommunityLabel(entry.section);
+      return `
+        <div class="showcase-member">
+          <img src="${escapeHtml(getCommunityImage(entry))}" alt="${escapeHtml(entry.name)}" loading="lazy" />
+          <div>
+            <strong>${escapeHtml(entry.name)}</strong>
+            <span>${escapeHtml(role)}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPartnerCard(entry) {
+      return `
+        <article class="partner-card">
+          <img src="${escapeHtml(getCommunityImage(entry))}" alt="${escapeHtml(entry.name)}" loading="lazy" />
+          <div class="partner-copy">
+            <small>${escapeHtml(entry.label || getCommunityLabel(entry.section))}</small>
+            <h3>${escapeHtml(entry.name)}</h3>
+            <p>${escapeHtml(entry.role || "Lider por anunciar")}</p>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderCommunityEntries(entries) {
+      document.querySelectorAll("[data-entry-list]").forEach((list) => {
+        list.innerHTML = "";
+      });
+
+      entries.forEach((entry) => {
+        if (entry.section === "partner") return;
+        const list = document.querySelector(`[data-entry-list="${entry.section}"]`);
+        if (!list) return;
+        list.insertAdjacentHTML("beforeend", renderShowcaseMember(entry));
+      });
+
+      const partnersGrid = document.getElementById("partnersGrid");
+      if (!partnersGrid) return;
+
+      const partners = entries.filter((entry) => entry.section === "partner");
+      partnersGrid.innerHTML = partners.length
+        ? partners.map(renderPartnerCard).join("")
+        : '<div class="partners-empty">Pronto se agregaran nuevos socios de la academia.</div>';
+    }
+
+    function renderOwnerCommunityList(errorMessage = "") {
+      const list = document.getElementById("ownerCommunityList");
+      if (!list) return;
+
+      if (errorMessage) {
+        list.innerHTML = `<div class="owner-empty">${escapeHtml(errorMessage)}</div>`;
+        return;
+      }
+
+      if (!communityEntriesCache.length) {
+        list.innerHTML = '<div class="owner-empty">Todavia no hay reconocimientos agregados.</div>';
+        return;
+      }
+
+      list.innerHTML = communityEntriesCache
+        .map((entry) => `
+          <div class="owner-community-item">
+            <img src="${escapeHtml(getCommunityImage(entry))}" alt="${escapeHtml(entry.name)}" loading="lazy" />
+            <div>
+              <strong>${escapeHtml(entry.name)}</strong>
+              <span>${escapeHtml(entry.label || getCommunityLabel(entry.section))}</span>
+              <span>${escapeHtml(entry.role || "")}</span>
+            </div>
+            <button class="owner-delete" type="button" data-community-delete="${escapeHtml(entry.id)}" data-image-path="${escapeHtml(entry.image_path || "")}">Eliminar</button>
+          </div>
+        `)
+        .join("");
+    }
+
+    async function fetchCommunityEntries() {
+      if (!supabaseClient) return [];
+      const { data, error } = await supabaseClient
+        .from("community_entries")
+        .select("id,section,label,name,role,image_url,image_path,sort_order,created_at")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      return data || [];
+    }
+
+    async function loadCommunityEntries(options = {}) {
+      if (!supabaseClient) return;
+
+      try {
+        communityEntriesCache = await fetchCommunityEntries();
+        renderCommunityEntries(communityEntriesCache);
+        renderOwnerCommunityList();
+      } catch (error) {
+        if (!options.silent) {
+          renderOwnerCommunityList("Falta correr el SQL nuevo de community_entries y Storage en Supabase.");
+        }
+      }
+    }
+
+    function makeUploadPath(section, file) {
+      const rawExt = (file.name.split(".").pop() || "png").toLowerCase();
+      const ext = rawExt.replace(/[^a-z0-9]/g, "") || "png";
+      const random = Math.random().toString(36).slice(2, 10);
+      return `${section}/${Date.now()}-${random}.${ext}`;
+    }
+
+    async function uploadCommunityPhoto(section, file) {
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error("La foto es muy grande. Usa una imagen de menos de 5MB.");
+      }
+
+      const imagePath = makeUploadPath(section, file);
+      const { error } = await supabaseClient
+        .storage
+        .from(communityPhotoBucket)
+        .upload(imagePath, file, { cacheControl: "3600", upsert: false });
+
+      if (error) throw error;
+
+      const { data } = supabaseClient
+        .storage
+        .from(communityPhotoBucket)
+        .getPublicUrl(imagePath);
+
+      return {
+        imagePath,
+        imageUrl: data.publicUrl
+      };
     }
 
     function showReferral(member, reused = false) {
@@ -2568,6 +3019,27 @@
       renderOwnerDashboard();
     }
 
+    async function deleteCommunityEntry(entryId, imagePath) {
+      if (!entryId || !supabaseClient) return;
+      if (!confirm("¿Eliminar este reconocimiento?")) return;
+
+      const { error } = await supabaseClient
+        .from("community_entries")
+        .delete()
+        .eq("id", entryId);
+
+      if (error) {
+        alert(error.message || "No se pudo eliminar el reconocimiento.");
+        return;
+      }
+
+      if (imagePath) {
+        await supabaseClient.storage.from(communityPhotoBucket).remove([imagePath]);
+      }
+
+      await loadCommunityEntries();
+    }
+
     function openLightbox(src) {
       lightboxImage.src = src;
       lightbox.classList.add("open");
@@ -2591,6 +3063,12 @@
         closeLightbox();
         closeMobileMenu();
       }
+    });
+
+    document.addEventListener("click", (event) => {
+      const deleteButton = event.target.closest("[data-community-delete]");
+      if (!deleteButton) return;
+      deleteCommunityEntry(deleteButton.dataset.communityDelete, deleteButton.dataset.imagePath || "");
     });
 
     async function createReferral(name, email, phone) {
@@ -2625,6 +3103,47 @@
 
       throw new Error("No se pudo generar un código único. Intenta otra vez.");
     }
+
+    document.getElementById("communityForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const section = document.getElementById("communitySection").value;
+      const name = document.getElementById("communityName").value.trim();
+      const role = document.getElementById("communityRole").value.trim();
+      const photo = document.getElementById("communityPhoto").files[0];
+      const messageEl = document.getElementById("communityMessage");
+
+      if (!requireSupabase(messageEl)) return;
+
+      if (!name || !photo) {
+        messageEl.textContent = "Agrega nombre y foto para publicar.";
+        return;
+      }
+
+      messageEl.textContent = "Subiendo foto...";
+
+      try {
+        const uploaded = await uploadCommunityPhoto(section, photo);
+        const { error } = await supabaseClient
+          .from("community_entries")
+          .insert({
+            section,
+            label: getCommunityLabel(section),
+            name,
+            role: role || null,
+            image_url: uploaded.imageUrl,
+            image_path: uploaded.imagePath,
+            sort_order: Date.now()
+          });
+
+        if (error) throw error;
+
+        event.target.reset();
+        messageEl.textContent = "Publicado correctamente.";
+        await loadCommunityEntries();
+      } catch (error) {
+        messageEl.textContent = error.message || "No se pudo publicar. Revisa el SQL y el bucket de Supabase.";
+      }
+    });
 
     document.getElementById("signupForm").addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -2703,6 +3222,7 @@
 
     if (window.location.hash === "#signup") openAuthModal("signup");
     if (window.location.hash === "#owner") openAuthModal("owner");
+    loadCommunityEntries({ silent: true });
   </script>
 </body>
 </html>
