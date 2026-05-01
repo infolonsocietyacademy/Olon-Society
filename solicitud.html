@@ -1,0 +1,2324 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Olon Society Academy - Solicitud privada de acceso estilo solicitud privada." />
+  <title>Olon Society Academy | Solicitud de Acceso</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script>
+window.OLON_SUPABASE = {
+  // Supabase Dashboard > Project Settings > API > Project URL
+  // Usa la URL base, sin /rest/v1 al final.
+  url: "https://ymqerlqrfndblyaifzzh.supabase.co",
+
+  // Supabase Dashboard > Project Settings > API > anon public key
+  // Tambien puede llamarse publishable key.
+  // Nunca pegues aqui una secret/service_role key.
+  anonKey: "sb_publishable_iTDkEkYW6QH9rj2hVl5anw_KIEa1A4L",
+
+  // Debe coincidir con el email del usuario owner creado en Supabase Auth.
+  ownerEmail: "infolonsocietyacademy@gmail.com",
+};
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #050913;
+  --panel: rgba(9, 15, 30, 0.78);
+  --panel-strong: rgba(9, 15, 30, 0.94);
+  --card: rgba(255, 255, 255, 0.08);
+  --card-2: rgba(255, 255, 255, 0.12);
+  --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(236, 191, 83, 0.38);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.68);
+  --faint: rgba(255, 255, 255, 0.44);
+  --gold: #e8b93f;
+  --gold-2: #ffe08a;
+  --gold-dark: #b57a17;
+  --danger: #ff6871;
+  --success: #34d399;
+  --blue: #38bdf8;
+  --radius: 28px;
+  --shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 18% 10%, rgba(232, 185, 63, 0.18), transparent 30%),
+    radial-gradient(circle at 90% 24%, rgba(56, 189, 248, 0.12), transparent 28%),
+    linear-gradient(135deg, #050913, #08101f 55%, #03050b);
+  font-family: "DM Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
+}
+
+.app-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+.orb {
+  position: absolute;
+  width: 420px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  filter: blur(24px);
+  opacity: 0.25;
+}
+
+.orb-one {
+  left: -130px;
+  top: 15%;
+  background: var(--gold);
+}
+
+.orb-two {
+  right: -150px;
+  top: 0;
+  background: #38bdf8;
+}
+
+.orb-three {
+  left: 52%;
+  bottom: -230px;
+  background: #a855f7;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px clamp(18px, 5vw, 68px);
+  background: linear-gradient(to bottom, rgba(5, 9, 19, 0.9), transparent);
+  backdrop-filter: blur(16px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "Sora", sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.brand img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(232, 185, 63, 0.24));
+}
+
+.brand strong {
+  color: var(--gold-2);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ghost-btn,
+.whatsapp-btn,
+.nav-btn,
+.filter,
+.accept-btn,
+.delete-btn {
+  border: 0;
+  border-radius: 999px;
+  min-height: 46px;
+  padding: 0 18px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  font-family: "Sora", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+}
+
+.ghost-btn {
+  border: 1px solid var(--line);
+}
+
+.whatsapp-btn,
+.nav-btn.next,
+.accept-btn {
+  color: #06101e;
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  box-shadow: 0 14px 34px rgba(232, 185, 63, 0.24);
+}
+
+.nav-btn.back {
+  border: 1px solid var(--line);
+}
+
+.delete-btn {
+  color: #fff;
+  background: rgba(255, 104, 113, 0.18);
+  border: 1px solid rgba(255, 104, 113, 0.35);
+}
+
+.ghost-btn:hover,
+.whatsapp-btn:hover,
+.nav-btn:hover,
+.filter:hover,
+.accept-btn:hover,
+.delete-btn:hover {
+  transform: translateY(-2px);
+}
+
+.solicitud-app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(24px, 4vw, 56px);
+  padding: 112px clamp(18px, 5vw, 68px) 38px;
+}
+
+.app-side {
+  display: flex;
+  align-items: stretch;
+}
+
+.side-card {
+  position: sticky;
+  top: 106px;
+  align-self: start;
+  width: 100%;
+  min-height: calc(100vh - 150px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(24px, 4vw, 42px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(155deg, rgba(232, 185, 63, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.side-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -20% -22% 20%;
+  height: 260px;
+  background: radial-gradient(circle, rgba(232, 185, 63, 0.22), transparent 68%);
+  pointer-events: none;
+}
+
+.side-kicker,
+.panel-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+  color: var(--gold-2);
+  font-family: "Sora", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.side-kicker::before,
+.panel-kicker::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 99px;
+  background: var(--gold);
+  box-shadow: 0 0 0 8px rgba(232, 185, 63, 0.13);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Sora", sans-serif;
+  line-height: 1.06;
+  letter-spacing: -0.05em;
+}
+
+.side-card h1 {
+  max-width: 10ch;
+  margin-bottom: 20px;
+  font-size: clamp(2.7rem, 6vw, 5.5rem);
+}
+
+.side-card p {
+  max-width: 48ch;
+  color: var(--muted);
+  font-size: 1.04rem;
+  line-height: 1.75;
+}
+
+.mini-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 34px 0;
+}
+
+.mini-stats div,
+.stats-grid div {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.mini-stats strong,
+.stats-grid strong {
+  display: block;
+  color: var(--gold-2);
+  font-family: "Sora", sans-serif;
+  font-size: 1.45rem;
+}
+
+.mini-stats span,
+.stats-grid span {
+  display: block;
+  margin-top: 7px;
+  color: var(--faint);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.side-note {
+  padding: 18px;
+  border: 1px solid rgba(232, 185, 63, 0.24);
+  border-radius: 20px;
+  background: rgba(232, 185, 63, 0.08);
+}
+
+.side-note span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--gold-2);
+  font-family: "Sora", sans-serif;
+  font-weight: 900;
+}
+
+.side-note p {
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.form-stage {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.progress-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--gold-2);
+  font-family: "Sora", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.progress-wrap h2 {
+  font-size: clamp(1.4rem, 3vw, 2.25rem);
+}
+
+.progress-ring {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+}
+
+.progress-ring svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.progress-ring circle {
+  fill: none;
+  stroke-width: 4;
+}
+
+.ring-bg {
+  stroke: rgba(255, 255, 255, 0.12);
+}
+
+.ring-fill {
+  stroke: var(--gold);
+  stroke-linecap: round;
+  stroke-dasharray: 113;
+  stroke-dashoffset: 113;
+  transition: stroke-dashoffset 0.35s var(--ease);
+}
+
+.progress-ring strong {
+  font-family: "Sora", sans-serif;
+  font-size: 0.78rem;
+}
+
+.progress-bar {
+  height: 9px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.progress-bar span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--gold-2), var(--gold));
+  transition: width 0.35s var(--ease);
+}
+
+.question-card {
+  min-height: 580px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(22px, 5vw, 52px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(232, 185, 63, 0.08), transparent 38%),
+    rgba(255, 255, 255, 0.075);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(24px);
+  overflow: hidden;
+}
+
+.question-inner {
+  min-height: 390px;
+  animation: fadeUp 0.34s var(--ease) both;
+}
+
+.question-step {
+  display: grid;
+  gap: 18px;
+}
+
+.step-number {
+  color: var(--gold-2);
+  font-family: "Sora", sans-serif;
+  font-size: 0.84rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.question-title {
+  max-width: 14ch;
+  font-size: clamp(2rem, 5.3vw, 4.4rem);
+}
+
+.question-subtitle {
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.input-large,
+.textarea-large,
+.select-large {
+  width: min(100%, 720px);
+  min-height: 66px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+  padding: 16px 18px;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+}
+
+.input-large::placeholder,
+.textarea-large::placeholder {
+  color: rgba(255, 255, 255, 0.36);
+}
+
+.textarea-large {
+  min-height: 170px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.select-large {
+  appearance: none;
+  cursor: pointer;
+}
+
+.input-large:focus,
+.textarea-large:focus,
+.select-large:focus {
+  border-color: var(--line-strong);
+  background: rgba(255, 255, 255, 0.11);
+  box-shadow: 0 0 0 5px rgba(232, 185, 63, 0.12);
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 760px);
+  gap: 12px;
+}
+
+.option-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 68px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.07);
+  font-weight: 900;
+  transition: border-color 0.22s ease, transform 0.22s ease, background 0.22s ease;
+}
+
+.option-card input {
+  accent-color: var(--gold);
+  width: 18px;
+  height: 18px;
+}
+
+.option-card:has(input:checked) {
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: rgba(232, 185, 63, 0.14);
+}
+
+.option-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.26);
+}
+
+.review-card {
+  display: grid;
+  gap: 16px;
+}
+
+.review-card h3 {
+  font-size: clamp(1.8rem, 4vw, 3.4rem);
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.review-grid div,
+.request-grid div,
+.details-grid div {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.review-grid span,
+.request-grid span,
+.details-grid span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--gold-2);
+  font-family: "Sora", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.review-grid p,
+.request-grid p,
+.details-grid p {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 26px;
+}
+
+.form-message,
+.panel-message {
+  min-height: 24px;
+  margin-top: 14px;
+  color: var(--gold-2);
+  line-height: 1.45;
+}
+
+.form-message.error,
+.panel-message.error {
+  color: #ffb4ba;
+}
+
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(3, 5, 11, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.panel-overlay.open {
+  display: flex;
+}
+
+.panel-card {
+  position: relative;
+  width: min(1180px, 100%);
+  max-height: 92vh;
+  overflow: auto;
+  padding: clamp(22px, 4vw, 38px);
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  background:
+    linear-gradient(145deg, rgba(232, 185, 63, 0.12), transparent 40%),
+    var(--panel-strong);
+  box-shadow: var(--shadow);
+}
+
+.panel-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 1.4rem;
+}
+
+.panel-login {
+  width: min(620px, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.panel-login h2,
+.dashboard-head h2 {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  margin-bottom: 12px;
+}
+
+.panel-login p {
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 22px;
+}
+
+.panel-login-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+}
+
+.panel-login-form input,
+.panel-tools input {
+  min-height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0 18px;
+  outline: none;
+}
+
+.panel-login-form input::placeholder,
+.panel-tools input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.panel-dashboard {
+  display: none;
+}
+
+.panel-dashboard.open {
+  display: block;
+}
+
+.dashboard-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.panel-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter.active {
+  color: #06101e;
+  background: var(--gold);
+}
+
+.requests-list {
+  display: grid;
+  gap: 14px;
+}
+
+.request-card {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.request-card.is-accepted {
+  border-color: rgba(52, 211, 153, 0.34);
+  background: rgba(52, 211, 153, 0.08);
+}
+
+.request-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.request-date {
+  display: block;
+  color: var(--faint);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.request-name {
+  font-size: 1.35rem;
+}
+
+.request-status {
+  align-self: start;
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 12px;
+  color: #06101e;
+  background: var(--gold);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.request-status.accepted {
+  color: #06101e;
+  background: var(--success);
+}
+
+.request-grid,
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.full-profile {
+  margin-top: 14px;
+}
+
+.full-profile summary {
+  color: var(--gold-2);
+  font-family: "Sora", sans-serif;
+  font-weight: 900;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.request-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.empty-state {
+  padding: 30px;
+  border: 1px dashed var(--line);
+  border-radius: 24px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 980px) {
+  .solicitud-app {
+    grid-template-columns: 1fr;
+    padding-top: 98px;
+  }
+
+  .side-card {
+    position: relative;
+    top: auto;
+    min-height: auto;
+  }
+
+  .side-card h1 {
+    max-width: 16ch;
+  }
+
+  .question-card {
+    min-height: 560px;
+  }
+
+  .panel-tools,
+  .dashboard-head {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .request-grid,
+  .details-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .topbar {
+    padding: 14px;
+  }
+
+  .brand span {
+    display: none;
+  }
+
+  .top-actions {
+    gap: 7px;
+  }
+
+  .ghost-btn,
+  .whatsapp-btn {
+    min-height: 42px;
+    padding-inline: 12px;
+    font-size: 0.74rem;
+  }
+
+  .solicitud-app {
+    padding: 84px 14px 22px;
+    gap: 16px;
+  }
+
+  .side-card,
+  .question-card,
+  .panel-card {
+    border-radius: 24px;
+  }
+
+  .side-card {
+    padding: 22px;
+  }
+
+  .side-card h1 {
+    font-size: 2.35rem;
+  }
+
+  .mini-stats,
+  .stats-grid,
+  .options-grid,
+  .review-grid,
+  .request-grid,
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .question-card {
+    min-height: 600px;
+    padding: 22px;
+  }
+
+  .question-title {
+    font-size: 2.25rem;
+  }
+
+  .nav-row,
+  .panel-login-form {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .nav-btn {
+    width: 100%;
+  }
+
+  .progress-ring {
+    width: 58px;
+    height: 58px;
+  }
+
+  .panel-overlay {
+    padding: 10px;
+  }
+
+  .panel-card {
+    max-height: 94vh;
+    padding: 20px;
+  }
+
+  .panel-close {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+
+.thanks-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(3, 5, 11, 0.78);
+  backdrop-filter: blur(22px);
+}
+
+.thanks-overlay.open {
+  display: flex;
+}
+
+.thanks-card {
+  width: min(620px, 100%);
+  padding: clamp(26px, 6vw, 54px);
+  border: 1px solid rgba(236, 191, 83, 0.38);
+  border-radius: 32px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(232, 185, 63, 0.20), transparent 42%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06)),
+    #07101f;
+  box-shadow: 0 34px 110px rgba(0, 0, 0, 0.48);
+  animation: fadeUp 0.34s var(--ease) both;
+}
+
+.thanks-icon {
+  width: 82px;
+  height: 82px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 22px;
+  border-radius: 999px;
+  color: #06101e;
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  font-family: "Sora", sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  box-shadow: 0 18px 44px rgba(232, 185, 63, 0.28);
+}
+
+.thanks-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  color: var(--gold-2);
+  font-family: "Sora", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.thanks-card h2 {
+  margin-bottom: 16px;
+  font-size: clamp(2rem, 5vw, 3.35rem);
+}
+
+.thanks-card p {
+  max-width: 48ch;
+  margin: 0 auto 26px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.thanks-close {
+  min-width: 180px;
+}
+
+@media (max-width: 680px) {
+  .thanks-card {
+    border-radius: 24px;
+  }
+
+  .thanks-close {
+    width: 100%;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="app-bg">
+    <span class="orb orb-one"></span>
+    <span class="orb orb-two"></span>
+    <span class="orb orb-three"></span>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Olon Society Academy">
+      <img src="assets/olon-mark.png" alt="Olon Society Academy" onerror="this.style.display='none'" />
+      <span>Olon <strong>Society</strong></span>
+    </a>
+
+    <div class="top-actions">
+      <button class="ghost-btn" type="button" id="openPanelBtn">Panel privado</button>
+    </div>
+  </header>
+
+  <main class="solicitud-app">
+    <aside class="app-side">
+      <div class="side-card">
+        <div class="side-kicker">Solicitud privada</div>
+        <h1>Solicita tu acceso a la academia.</h1>
+        <p>Completa tu perfil. Revisaremos tu información y, si cualificas, recibirás los próximos pasos.</p>
+
+        <div class="mini-stats">
+          <div><strong>01</strong><span>Perfil</span></div>
+          <div><strong>02</strong><span>Evaluación</span></div>
+          <div><strong>03</strong><span>Acceso</span></div>
+        </div>
+
+        <div class="side-note">
+          <span>Importante</span>
+          <p>No prometemos resultados garantizados. Evaluamos disciplina, compromiso y disponibilidad para aprender.</p>
+        </div>
+      </div>
+    </aside>
+
+    <section class="form-stage" aria-live="polite">
+      <div class="progress-wrap">
+        <div>
+          <span class="progress-label" id="progressLabel">Paso 1 de 15</span>
+          <h2 id="stepCategory">Bienvenida</h2>
+        </div>
+        <div class="progress-ring">
+          <svg viewBox="0 0 44 44" aria-hidden="true">
+            <circle class="ring-bg" cx="22" cy="22" r="18"></circle>
+            <circle class="ring-fill" id="ringFill" cx="22" cy="22" r="18"></circle>
+          </svg>
+          <strong id="progressPercent">0%</strong>
+        </div>
+      </div>
+
+      <div class="progress-bar">
+        <span id="progressBar"></span>
+      </div>
+
+      <form id="solicitudForm" class="question-card">
+        <div class="question-inner" id="questionInner"></div>
+
+        <div class="nav-row">
+          <button class="nav-btn back" type="button" id="backBtn">Atrás</button>
+          <button class="nav-btn next" type="button" id="nextBtn">Comenzar</button>
+        </div>
+
+        <p class="form-message" id="formMessage"></p>
+      </form>
+    </section>
+  </main>
+
+
+  <div class="thanks-overlay" id="thanksOverlay" aria-hidden="true">
+    <div class="thanks-card" role="dialog" aria-modal="true" aria-labelledby="thanksTitle">
+      <div class="thanks-icon">✓</div>
+      <span class="thanks-kicker">Solicitud enviada</span>
+      <h2 id="thanksTitle">Gracias, tu solicitud está siendo revisada.</h2>
+      <p>Recibimos tu aplicación correctamente. Nuestro equipo evaluará tu perfil y, si eres aprobado(a), te enviaremos los próximos pasos por WhatsApp.</p>
+      <button class="nav-btn next thanks-close" type="button" id="closeThanksBtn">Cerrar</button>
+    </div>
+  </div>
+
+  <div class="panel-overlay" id="panelOverlay" aria-hidden="true">
+    <div class="panel-card" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
+      <button class="panel-close" type="button" id="closePanelBtn" aria-label="Cerrar panel">&times;</button>
+
+      <div class="panel-login" id="panelLogin">
+        <div class="panel-kicker">Owner panel</div>
+        <h2 id="panelTitle">Panel privado</h2>
+        <p>Revisa solicitudes, exporta datos y acepta estudiantes directamente por WhatsApp.</p>
+
+        <form id="panelLoginForm" class="panel-login-form">
+          <input id="ownerPassword" type="password" placeholder="Clave de acceso" autocomplete="current-password" />
+          <button class="nav-btn next" type="submit">Entrar</button>
+        </form>
+        <p class="panel-message" id="panelMessage"></p>
+      </div>
+
+      <div class="panel-dashboard" id="panelDashboard">
+        <div class="dashboard-head">
+          <div>
+            <div class="panel-kicker">Gestión de solicitudes</div>
+            <h2>Solicitudes recibidas</h2>
+          </div>
+          <div class="dashboard-actions">
+            <button class="ghost-btn" type="button" id="recoverLocalBtn">Recuperar registros</button>
+            <button class="ghost-btn" type="button" id="exportBtn">Exportar CSV</button>
+            <button class="ghost-btn" type="button" id="logoutBtn">Salir</button>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div><strong id="totalCount">0</strong><span>Total</span></div>
+          <div><strong id="pendingCount">0</strong><span>Pendientes</span></div>
+          <div><strong id="acceptedCount">0</strong><span>Aceptadas</span></div>
+        </div>
+
+        <div class="panel-tools">
+          <input id="searchRequests" type="search" placeholder="Buscar por nombre, email, WhatsApp o país..." />
+          <div class="filters">
+            <button class="filter active" type="button" data-filter="pending">Pendientes</button>
+            <button class="filter" type="button" data-filter="accepted">Aceptadas</button>
+            <button class="filter" type="button" data-filter="all">Todas</button>
+          </div>
+        </div>
+
+        <div class="requests-list" id="requestsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <template id="requestTemplate">
+    <article class="request-card">
+      <div class="request-top">
+        <div>
+          <span class="request-date"></span>
+          <h3 class="request-name"></h3>
+        </div>
+        <span class="request-status"></span>
+      </div>
+
+      <div class="request-grid">
+        <div><span>Email</span><p class="request-email"></p></div>
+        <div><span>WhatsApp</span><p class="request-whatsapp"></p></div>
+        <div><span>Ubicación</span><p class="request-location"></p></div>
+        <div><span>Experiencia</span><p class="request-experience"></p></div>
+        <div><span>Capital</span><p class="request-capital"></p></div>
+        <div><span>Interés</span><p class="request-interest"></p></div>
+      </div>
+
+      <details class="full-profile">
+        <summary>Ver perfil completo</summary>
+        <div class="details-grid"></div>
+      </details>
+
+      <div class="request-actions">
+        <button class="accept-btn" type="button">Aceptar + WhatsApp</button>
+        <button class="delete-btn" type="button">Eliminar</button>
+      </div>
+    </article>
+  </template>
+
+  <script>
+const STORAGE_KEY = "olonPortalRequests";
+const TYPEFORM_STORAGE_KEY = "olonsolicitudRequests";
+const EXTRA_STORAGE_KEYS = [
+  "olonPortalRequests",
+  "olonsolicitudRequests",
+  "portal_requests",
+  "requests",
+  "academyRequests",
+  "olonRequests",
+  "registrationRequests",
+  "formRequests"
+];
+const LOCAL_PANEL_PASSWORD = "nolofx";
+const WHATSAPP_MESSAGE = `Bienvenido(a) a Olon Society Academy. Tu solicitud ha sido aprobada.
+
+Accede al grupo aqui:
+https://chat.whatsapp.com/CJ7xwOU2s1262iiYbSSoPy?mode=gi_t
+
+Dentro del grupo recibiras los proximos pasos, orientacion inicial y el acceso correspondiente segun tu perfil.
+
+Nota importante:
+No te pedimos dinero para invertir por ti. Nosotros ensenamos.
+
+Si recibes algun mensaje en nuestro nombre solicitando dinero, por favor reportalo de inmediato.
+
+Nos vemos dentro.`;
+
+const supabaseConfig = window.OLON_SUPABASE || {};
+const isSupabaseReady = Boolean(
+  supabaseConfig.url &&
+  supabaseConfig.anonKey &&
+  !String(supabaseConfig.url).includes("PASTE_") &&
+  !String(supabaseConfig.anonKey).includes("PASTE_") &&
+  window.supabase
+);
+
+const supabaseClient = isSupabaseReady
+  ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
+  : null;
+
+const steps = [
+  {
+    type: "welcome",
+    category: "Bienvenida",
+    title: "Comencemos tu solicitud.",
+    subtitle: "Responde las preguntas para que nuestro equipo pueda evaluar tu perfil antes de enviarte los próximos pasos.",
+  },
+  {
+    key: "fullName",
+    category: "Información personal",
+    title: "¿Cuál es tu nombre completo?",
+    subtitle: "Escribe tu nombre como deseas que aparezca en la revisión.",
+    input: "text",
+    placeholder: "Ejemplo: Kenneth Navarro",
+    required: true,
+  },
+  {
+    key: "email",
+    category: "Información personal",
+    title: "¿Cuál es tu correo electrónico?",
+    subtitle: "Lo usaremos solo para identificar tu solicitud.",
+    input: "email",
+    placeholder: "tuemail@gmail.com",
+    required: true,
+  },
+  {
+    key: "whatsapp",
+    category: "Información personal",
+    title: "¿Cuál es tu número de WhatsApp?",
+    subtitle: "Si tu solicitud es aprobada, te enviaremos el acceso por WhatsApp.",
+    input: "tel",
+    placeholder: "+1 787 000 0000",
+    required: true,
+  },
+  {
+    key: "age",
+    category: "Información personal",
+    title: "¿Qué edad tienes?",
+    subtitle: "Esto nos ayuda a evaluar mejor el perfil de entrada.",
+    input: "number",
+    placeholder: "Ejemplo: 24",
+    required: true,
+  },
+  {
+    key: "location",
+    category: "Ubicación",
+    title: "¿Dónde resides?",
+    subtitle: "Escribe país y ciudad o pueblo.",
+    input: "text",
+    placeholder: "Ejemplo: Puerto Rico, Mayagüez",
+    required: true,
+  },
+  {
+    key: "working",
+    category: "Perfil financiero",
+    title: "¿Actualmente estás trabajando?",
+    subtitle: "Selecciona la opción que mejor describa tu situación actual.",
+    input: "radio",
+    required: true,
+    options: ["Sí", "No", "Trabajo por cuenta propia"],
+  },
+  {
+    key: "monthlyIncome",
+    category: "Perfil financiero",
+    title: "¿Cuál es tu ingreso mensual aproximado?",
+    subtitle: "Esta información ayuda a recomendarte un acceso realista.",
+    input: "radio",
+    required: true,
+    options: ["Menos de $1,000", "$1,000 - $3,000", "Más de $3,000", "Prefiero no decir"],
+  },
+  {
+    key: "availableCapital",
+    category: "Perfil financiero",
+    title: "¿Con cuánto capital puedes iniciar?",
+    subtitle: "No tienes que invertir con nosotros. Esto es para medir tu punto de partida.",
+    input: "radio",
+    required: true,
+    options: ["$0 - $100", "$100 - $500", "$500 - $1,000", "Más de $1,000"],
+  },
+  {
+    key: "experienceLevel",
+    category: "Trading",
+    title: "¿Cuál es tu nivel de experiencia?",
+    subtitle: "Sé honesto. El objetivo es ponerte en el nivel correcto.",
+    input: "radio",
+    required: true,
+    options: ["Ninguna", "Básica", "Intermedia", "Avanzada"],
+  },
+  {
+    key: "markets",
+    category: "Trading",
+    title: "¿Qué mercados te interesan?",
+    subtitle: "Puedes seleccionar más de uno.",
+    input: "checkbox",
+    required: true,
+    options: ["Forex", "Oro / XAUUSD", "Índices / NAS100 / US30", "Criptomonedas", "No sé todavía"],
+  },
+  {
+    key: "tradingLosses",
+    category: "Trading",
+    title: "¿Has tenido pérdidas operando?",
+    subtitle: "Esto nos ayuda a entender tu experiencia y mentalidad.",
+    input: "radio",
+    required: true,
+    options: ["Sí", "No", "Nunca he operado"],
+  },
+  {
+    key: "motivation",
+    category: "Mentalidad",
+    title: "¿Por qué deseas aprender trading?",
+    subtitle: "Escribe una respuesta corta y real. Queremos conocer tu enfoque.",
+    input: "textarea",
+    placeholder: "Quiero aprender trading porque...",
+    required: true,
+  },
+  {
+    key: "weeklyTime",
+    category: "Compromiso",
+    title: "¿Cuánto tiempo semanal puedes dedicar?",
+    subtitle: "La consistencia es clave dentro de la academia.",
+    input: "radio",
+    required: true,
+    options: ["1 a 5 horas", "5 a 10 horas", "Más de 10 horas"],
+  },
+  {
+    key: "accessInterest",
+    category: "Programa",
+    title: "¿Qué tipo de acceso te interesa?",
+    subtitle: "Puedes seleccionar más de una opción.",
+    input: "checkbox",
+    required: true,
+    options: ["Señales VIP", "Indicador automatizado", "Mentoría personalizada", "Comunidad + educación"],
+  },
+  {
+    type: "review",
+    category: "Resumen",
+    title: "Revisa tu solicitud antes de enviar.",
+    subtitle: "Si todo está correcto, presiona enviar solicitud.",
+  },
+];
+
+const state = {
+  index: 0,
+  answers: {},
+  activeFilter: "pending",
+  panelRequests: [],
+};
+
+const questionInner = document.getElementById("questionInner");
+const progressLabel = document.getElementById("progressLabel");
+const stepCategory = document.getElementById("stepCategory");
+const progressBar = document.getElementById("progressBar");
+const progressPercent = document.getElementById("progressPercent");
+const ringFill = document.getElementById("ringFill");
+const backBtn = document.getElementById("backBtn");
+const nextBtn = document.getElementById("nextBtn");
+const formMessage = document.getElementById("formMessage");
+const thanksOverlay = document.getElementById("thanksOverlay");
+const closeThanksBtn = document.getElementById("closeThanksBtn");
+const panelOverlay = document.getElementById("panelOverlay");
+const openPanelBtn = document.getElementById("openPanelBtn");
+const closePanelBtn = document.getElementById("closePanelBtn");
+const panelLogin = document.getElementById("panelLogin");
+const panelDashboard = document.getElementById("panelDashboard");
+const panelLoginForm = document.getElementById("panelLoginForm");
+const ownerPassword = document.getElementById("ownerPassword");
+const panelMessage = document.getElementById("panelMessage");
+const logoutBtn = document.getElementById("logoutBtn");
+const exportBtn = document.getElementById("exportBtn");
+const recoverLocalBtn = document.getElementById("recoverLocalBtn");
+const searchRequests = document.getElementById("searchRequests");
+const requestsList = document.getElementById("requestsList");
+const requestTemplate = document.getElementById("requestTemplate");
+const totalCount = document.getElementById("totalCount");
+const pendingCount = document.getElementById("pendingCount");
+const acceptedCount = document.getElementById("acceptedCount");
+const filters = Array.from(document.querySelectorAll("[data-filter]"));
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function normalizePhone(phone) {
+  return String(phone || "").replace(/^00/, "").replace(/\D/g, "");
+}
+
+function buildWhatsappUrl(phone, message) {
+  return `https://wa.me/${normalizePhone(phone)}?text=${encodeURIComponent(message)}`;
+}
+
+function createId() {
+  return `OLON-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+}
+
+function normalizeLegacyRequest(item) {
+  if (!item) return null;
+
+  if (item.fullName || item.location || item.experienceLevel) {
+    return {
+      id: item.id || createId(),
+      status: item.status || "pending",
+      submittedAt: item.submittedAt || item.submitted_at || new Date().toISOString(),
+      acceptedAt: item.acceptedAt || item.accepted_at || null,
+      fullName: item.fullName || "",
+      email: item.email || "",
+      whatsapp: item.whatsapp || "",
+      cleanWhatsapp: item.cleanWhatsapp || normalizePhone(item.whatsapp),
+      age: item.age || "",
+      location: item.location || "",
+      working: item.working || "",
+      monthlyIncome: item.monthlyIncome || "",
+      availableCapital: item.availableCapital || "",
+      experienceLevel: item.experienceLevel || "",
+      markets: item.markets || [],
+      tradingLosses: item.tradingLosses || "",
+      motivation: item.motivation || "",
+      weeklyTime: item.weeklyTime || "",
+      accessInterest: item.accessInterest || [],
+    };
+  }
+
+  if (item.personal || item.financial || item.trading || item.mindset || item.program) {
+    const personal = item.personal || {};
+    const financial = item.financial || {};
+    const trading = item.trading || {};
+    const mindset = item.mindset || {};
+    const program = item.program || {};
+
+    return {
+      id: item.id || createId(),
+      status: item.status || "pending",
+      submittedAt: item.submittedAt || item.submitted_at || new Date().toISOString(),
+      acceptedAt: item.acceptedAt || item.accepted_at || null,
+      fullName: personal.fullName || "",
+      email: personal.email || "",
+      whatsapp: personal.whatsapp || "",
+      cleanWhatsapp: personal.cleanWhatsapp || normalizePhone(personal.whatsapp),
+      age: personal.age || "",
+      location: [personal.country, personal.city].filter(Boolean).join(", "),
+      working: financial.working || "",
+      monthlyIncome: financial.monthlyIncome || "",
+      availableCapital: financial.availableCapital || "",
+      experienceLevel: trading.experienceLevel || "",
+      markets: trading.markets || [],
+      tradingLosses: trading.tradingLosses || "",
+      motivation: mindset.motivation || "",
+      weeklyTime: mindset.weeklyTime || "",
+      accessInterest: program.accessInterest || [],
+    };
+  }
+
+  return null;
+}
+
+function parseStoredRequests(key) {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(key) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function readLocalRequests() {
+  const keys = new Set(EXTRA_STORAGE_KEYS);
+
+  // Escanea todas las llaves del navegador por si una versión vieja guardó con otro nombre.
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key) continue;
+    const lower = key.toLowerCase();
+    if (
+      lower.includes("olon") ||
+      lower.includes("portal") ||
+      lower.includes("request") ||
+      lower.includes("solicitud") ||
+      lower.includes("academy")
+    ) {
+      keys.add(key);
+    }
+  }
+
+  const merged = [];
+  keys.forEach((key) => {
+    parseStoredRequests(key).forEach((item) => {
+      const normalized = normalizeLegacyRequest(item);
+      if (normalized) merged.push(normalized);
+    });
+  });
+
+  const unique = [];
+  const seen = new Set();
+
+  merged.forEach((request) => {
+    const uniqueKey = request.id || `${request.email}-${request.whatsapp}-${request.submittedAt}`;
+    if (seen.has(uniqueKey)) return;
+    seen.add(uniqueKey);
+    unique.push(request);
+  });
+
+  unique.sort((a, b) => new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0));
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(unique));
+  return unique;
+}
+
+function writeLocalRequests(requests) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(requests));
+}
+
+function requestToRow(request) {
+  return {
+    id: request.id,
+    status: request.status,
+    submitted_at: request.submittedAt,
+    accepted_at: request.acceptedAt,
+    full_name: request.fullName,
+    email: request.email,
+    whatsapp: request.whatsapp,
+    clean_whatsapp: request.cleanWhatsapp,
+    age: Number(request.age) || null,
+    location: request.location,
+    working: request.working,
+    monthly_income: request.monthlyIncome,
+    available_capital: request.availableCapital,
+    experience_level: request.experienceLevel,
+    markets: request.markets || [],
+    trading_losses: request.tradingLosses,
+    motivation: request.motivation,
+    weekly_time: request.weeklyTime,
+    access_interest: request.accessInterest || [],
+  };
+}
+
+
+function requestToOldPortalRow(request) {
+  const [country = "", city = ""] = String(request.location || "").split(",").map((part) => part.trim());
+
+  return {
+    id: request.id,
+    status: request.status,
+    submitted_at: request.submittedAt,
+    accepted_at: request.acceptedAt,
+    full_name: request.fullName,
+    email: request.email,
+    whatsapp: request.whatsapp,
+    clean_whatsapp: request.cleanWhatsapp,
+    age: request.age ? Number(request.age) : null,
+    country,
+    city,
+    working: request.working,
+    monthly_income: request.monthlyIncome,
+    available_capital: request.availableCapital,
+    experience_level: request.experienceLevel,
+    markets: request.markets || [],
+    trading_losses: request.tradingLosses,
+    motivation: request.motivation,
+    weekly_time: request.weeklyTime,
+    discipline: "",
+    main_goal: "",
+    results_timeline: "",
+    investment_intent: "",
+    access_interest: request.accessInterest || [],
+  };
+}
+
+function rowToRequest(row) {
+  return {
+    id: row.id || createId(),
+    status: row.status || "pending",
+    submittedAt: row.submitted_at || row.submittedAt || row.created_at || new Date().toISOString(),
+    acceptedAt: row.accepted_at || row.acceptedAt || null,
+    fullName: row.full_name || row.fullName || row.name || "",
+    email: row.email || "",
+    whatsapp: row.whatsapp || row.phone || row.telefono || "",
+    cleanWhatsapp: row.clean_whatsapp || row.cleanWhatsapp || normalizePhone(row.whatsapp || row.phone || row.telefono),
+    age: row.age ? String(row.age) : "",
+    location: row.location || [row.country || row.pais, row.city || row.ciudad].filter(Boolean).join(", "),
+    working: row.working || row.trabajando || "",
+    monthlyIncome: row.monthly_income || row.monthlyIncome || row.ingreso_mensual || "",
+    availableCapital: row.available_capital || row.availableCapital || row.capital_disponible || "",
+    experienceLevel: row.experience_level || row.experienceLevel || row.nivel_experiencia || "",
+    markets: row.markets || row.mercados || [],
+    tradingLosses: row.trading_losses || row.tradingLosses || row.perdidas || "",
+    motivation: row.motivation || row.motivacion || "",
+    weeklyTime: row.weekly_time || row.weeklyTime || row.tiempo_semanal || "",
+    accessInterest: row.access_interest || row.accessInterest || row.interes_acceso || [],
+  };
+}
+
+async function saveRequest(request) {
+  if (!supabaseClient) {
+    const requests = readLocalRequests();
+    requests.unshift(request);
+    writeLocalRequests(requests);
+    return;
+  }
+
+  let { error } = await supabaseClient.from("portal_requests").insert(requestToRow(request));
+
+  if (error) {
+    // Si la tabla vieja no tiene columnas nuevas como "location", intenta con el formato anterior.
+    const fallback = await supabaseClient.from("portal_requests").insert(requestToOldPortalRow(request));
+    error = fallback.error;
+  }
+
+  if (error) throw error;
+}
+
+async function fetchRequests() {
+  if (!supabaseClient) return readLocalRequests();
+
+  const { data, error } = await supabaseClient
+    .from("portal_requests")
+    .select("*")
+    .order("submitted_at", { ascending: false });
+
+  if (error) throw error;
+  return (data || []).map(rowToRequest);
+}
+
+async function acceptRequest(request) {
+  const acceptedAt = new Date().toISOString();
+
+  if (!supabaseClient) {
+    const updated = readLocalRequests().map((item) =>
+      item.id === request.id ? { ...item, status: "accepted", acceptedAt } : item
+    );
+    writeLocalRequests(updated);
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("portal_requests")
+    .update({ status: "accepted", accepted_at: acceptedAt })
+    .eq("id", request.id);
+
+  if (error) throw error;
+}
+
+async function deleteRequest(request) {
+  if (!supabaseClient) {
+    writeLocalRequests(readLocalRequests().filter((item) => item.id !== request.id));
+    return;
+  }
+
+  const { error } = await supabaseClient.from("portal_requests").delete().eq("id", request.id);
+  if (error) throw error;
+}
+
+function updateProgress() {
+  const total = steps.length;
+  const humanStep = state.index + 1;
+  const percent = Math.round((state.index / (total - 1)) * 100);
+  const ringLength = 113;
+  const offset = ringLength - (ringLength * percent) / 100;
+
+  progressLabel.textContent = `Paso ${humanStep} de ${total}`;
+  stepCategory.textContent = steps[state.index].category || "";
+  progressBar.style.width = `${percent}%`;
+  progressPercent.textContent = `${percent}%`;
+  ringFill.style.strokeDashoffset = String(offset);
+
+  backBtn.style.visibility = state.index === 0 ? "hidden" : "visible";
+
+  if (state.index === 0) nextBtn.textContent = "Comenzar";
+  else if (steps[state.index].type === "review") nextBtn.textContent = "Enviar solicitud";
+  else nextBtn.textContent = "Continuar";
+}
+
+function renderStep() {
+  const step = steps[state.index];
+  formMessage.textContent = "";
+  formMessage.classList.remove("error");
+  updateProgress();
+
+  questionInner.style.animation = "none";
+  requestAnimationFrame(() => {
+    questionInner.style.animation = "";
+  });
+
+  if (step.type === "welcome") {
+    questionInner.innerHTML = `
+      <div class="question-step">
+        <span class="step-number">Olon Society Academy</span>
+        <h2 class="question-title">${escapeHtml(step.title)}</h2>
+        <p class="question-subtitle">${escapeHtml(step.subtitle)}</p>
+        <div class="review-grid">
+          <div><span>Solicitud</span><p>Completa tu información para evaluación.</p></div>
+          <div><span>Tiempo</span><p>Completar la solicitud toma menos de 3 minutos.</p></div>
+          <div><span>Revisión</span><p>Tu solicitud queda pendiente hasta ser evaluada.</p></div>
+          <div><span>Acceso</span><p>Si eres aprobado, te escribiremos por WhatsApp.</p></div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  if (step.type === "review") {
+    questionInner.innerHTML = renderReview();
+    return;
+  }
+
+  const savedValue = state.answers[step.key] ?? (step.input === "checkbox" ? [] : "");
+  let controlHtml = "";
+
+  if (["text", "email", "tel", "number"].includes(step.input)) {
+    controlHtml = `<input class="input-large" id="currentInput" type="${step.input}" placeholder="${escapeHtml(step.placeholder || "")}" value="${escapeHtml(savedValue)}" autocomplete="off" />`;
+  }
+
+  if (step.input === "textarea") {
+    controlHtml = `<textarea class="textarea-large" id="currentInput" placeholder="${escapeHtml(step.placeholder || "")}">${escapeHtml(savedValue)}</textarea>`;
+  }
+
+  if (step.input === "radio") {
+    controlHtml = `
+      <div class="options-grid">
+        ${step.options.map((option) => `
+          <label class="option-card">
+            <input type="radio" name="${step.key}" value="${escapeHtml(option)}" ${savedValue === option ? "checked" : ""} />
+            <span>${escapeHtml(option)}</span>
+          </label>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  if (step.input === "checkbox") {
+    const values = Array.isArray(savedValue) ? savedValue : [];
+    controlHtml = `
+      <div class="options-grid">
+        ${step.options.map((option) => `
+          <label class="option-card">
+            <input type="checkbox" name="${step.key}" value="${escapeHtml(option)}" ${values.includes(option) ? "checked" : ""} />
+            <span>${escapeHtml(option)}</span>
+          </label>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  questionInner.innerHTML = `
+    <div class="question-step">
+      <span class="step-number">${escapeHtml(step.category)}</span>
+      <h2 class="question-title">${escapeHtml(step.title)}</h2>
+      <p class="question-subtitle">${escapeHtml(step.subtitle || "")}</p>
+      ${controlHtml}
+    </div>
+  `;
+
+  const input = document.getElementById("currentInput");
+  if (input) {
+    setTimeout(() => input.focus(), 50);
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && step.input !== "textarea") {
+        event.preventDefault();
+        nextStep();
+      }
+    });
+  }
+}
+
+function getCurrentValue() {
+  const step = steps[state.index];
+  if (step.type) return true;
+
+  if (["text", "email", "tel", "number", "textarea"].includes(step.input)) {
+    return String(document.getElementById("currentInput")?.value || "").trim();
+  }
+
+  if (step.input === "radio") {
+    return document.querySelector(`input[name="${step.key}"]:checked`)?.value || "";
+  }
+
+  if (step.input === "checkbox") {
+    return Array.from(document.querySelectorAll(`input[name="${step.key}"]:checked`)).map((input) => input.value);
+  }
+
+  return "";
+}
+
+function validateStep() {
+  const step = steps[state.index];
+  if (step.type) return true;
+
+  const value = getCurrentValue();
+
+  if (step.required) {
+    if (Array.isArray(value) && value.length === 0) {
+      showFormMessage("Selecciona al menos una opción.", true);
+      return false;
+    }
+
+    if (!Array.isArray(value) && !value) {
+      showFormMessage("Completa esta pregunta para continuar.", true);
+      return false;
+    }
+  }
+
+  if (step.key === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+    showFormMessage("Escribe un correo válido.", true);
+    return false;
+  }
+
+  if (step.key === "whatsapp" && normalizePhone(value).length < 7) {
+    showFormMessage("Verifica el número de WhatsApp.", true);
+    return false;
+  }
+
+  if (step.key === "age") {
+    const age = Number(value);
+    if (!Number.isFinite(age) || age < 13 || age > 100) {
+      showFormMessage("Escribe una edad válida.", true);
+      return false;
+    }
+  }
+
+  state.answers[step.key] = value;
+  return true;
+}
+
+function showFormMessage(message, isError = false) {
+  formMessage.textContent = message;
+  formMessage.classList.toggle("error", isError);
+}
+
+function nextStep() {
+  const step = steps[state.index];
+
+  if (step.type === "review") {
+    submitApplication();
+    return;
+  }
+
+  if (!validateStep()) return;
+
+  if (state.index < steps.length - 1) {
+    state.index++;
+    renderStep();
+  }
+}
+
+function previousStep() {
+  if (state.index > 0) {
+    state.index--;
+    renderStep();
+  }
+}
+
+function renderReview() {
+  const a = state.answers;
+  const rows = [
+    ["Nombre", a.fullName],
+    ["Email", a.email],
+    ["WhatsApp", a.whatsapp],
+    ["Edad", a.age],
+    ["Ubicación", a.location],
+    ["Trabaja", a.working],
+    ["Ingreso", a.monthlyIncome],
+    ["Capital", a.availableCapital],
+    ["Experiencia", a.experienceLevel],
+    ["Mercados", Array.isArray(a.markets) ? a.markets.join(", ") : a.markets],
+    ["Pérdidas", a.tradingLosses],
+    ["Tiempo semanal", a.weeklyTime],
+    ["Interés", Array.isArray(a.accessInterest) ? a.accessInterest.join(", ") : a.accessInterest],
+    ["Motivación", a.motivation],
+  ];
+
+  return `
+    <div class="review-card">
+      <span class="step-number">Resumen final</span>
+      <h3>Confirma que todo esté correcto.</h3>
+      <p class="question-subtitle">Puedes volver atrás para corregir cualquier respuesta antes de enviar tu solicitud.</p>
+      <div class="review-grid">
+        ${rows.map(([label, value]) => `
+          <div>
+            <span>${escapeHtml(label)}</span>
+            <p>${escapeHtml(value || "—")}</p>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function makeRequest() {
+  const a = state.answers;
+  return {
+    id: createId(),
+    status: "pending",
+    submittedAt: new Date().toISOString(),
+    acceptedAt: null,
+    fullName: a.fullName || "",
+    email: a.email || "",
+    whatsapp: a.whatsapp || "",
+    cleanWhatsapp: normalizePhone(a.whatsapp),
+    age: a.age || "",
+    location: a.location || "",
+    working: a.working || "",
+    monthlyIncome: a.monthlyIncome || "",
+    availableCapital: a.availableCapital || "",
+    experienceLevel: a.experienceLevel || "",
+    markets: a.markets || [],
+    tradingLosses: a.tradingLosses || "",
+    motivation: a.motivation || "",
+    weeklyTime: a.weeklyTime || "",
+    accessInterest: a.accessInterest || [],
+  };
+}
+
+async function submitApplication() {
+  const request = makeRequest();
+
+  nextBtn.disabled = true;
+  showFormMessage("Enviando solicitud...");
+
+  try {
+    await saveRequest(request);
+    state.answers = {};
+    state.index = 0;
+    renderStep();
+    showFormMessage("");
+    openThanksScreen();
+  } catch (error) {
+    showFormMessage(error.message || "No se pudo enviar la solicitud.", true);
+  } finally {
+    nextBtn.disabled = false;
+  }
+}
+
+
+function openThanksScreen() {
+  thanksOverlay.classList.add("open");
+  thanksOverlay.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeThanksScreen() {
+  thanksOverlay.classList.remove("open");
+  thanksOverlay.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  state.index = 0;
+  state.answers = {};
+  renderStep();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function openPanel() {
+  panelOverlay.classList.add("open");
+  panelOverlay.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  panelMessage.textContent = "";
+  setTimeout(() => ownerPassword.focus(), 50);
+}
+
+function closePanel() {
+  panelOverlay.classList.remove("open");
+  panelOverlay.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+async function unlockPanel() {
+  const password = ownerPassword.value.trim();
+  panelMessage.classList.remove("error");
+
+  if (!password) {
+    panelMessage.textContent = "Escribe la clave de acceso.";
+    panelMessage.classList.add("error");
+    return;
+  }
+
+  if (supabaseClient) {
+    panelMessage.textContent = "Conectando con Supabase...";
+
+    try {
+      const ownerEmail = String(supabaseConfig.ownerEmail || "infolonsocietyacademy@gmail.com").toLowerCase();
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email: ownerEmail,
+        password,
+      });
+
+      if (error) {
+        panelMessage.textContent = "No se pudo entrar. Verifica la clave del usuario owner en Supabase Auth.";
+        panelMessage.classList.add("error");
+        return;
+      }
+
+      panelMessage.textContent = "";
+      ownerPassword.value = "";
+      panelLogin.style.display = "none";
+      panelDashboard.classList.add("open");
+      await refreshPanel();
+      return;
+    } catch (error) {
+      panelMessage.textContent = error.message || "Error conectando con Supabase.";
+      panelMessage.classList.add("error");
+      return;
+    }
+  }
+
+  if (password !== LOCAL_PANEL_PASSWORD) {
+    panelMessage.textContent = "Clave incorrecta.";
+    panelMessage.classList.add("error");
+    return;
+  }
+
+  panelMessage.textContent = "";
+  ownerPassword.value = "";
+  panelLogin.style.display = "none";
+  panelDashboard.classList.add("open");
+  await refreshPanel();
+}
+
+async function refreshPanel() {
+  try {
+    state.panelRequests = await fetchRequests();
+    renderRequests();
+  } catch (error) {
+    requestsList.innerHTML = `<div class="empty-state">No se pudieron cargar las solicitudes.</div>`;
+  }
+}
+
+function formatDate(value) {
+  if (!value) return "Sin fecha";
+  return new Intl.DateTimeFormat("es-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+function matchesSearch(request, term) {
+  if (!term) return true;
+  const haystack = [
+    request.fullName,
+    request.email,
+    request.whatsapp,
+    request.location,
+    request.experienceLevel,
+    request.availableCapital,
+    ...(request.markets || []),
+    ...(request.accessInterest || []),
+  ].join(" ").toLowerCase();
+
+  return haystack.includes(term.toLowerCase());
+}
+
+function renderRequests() {
+  const term = searchRequests.value.trim();
+  const all = state.panelRequests;
+
+  const pending = all.filter((request) => request.status !== "accepted").length;
+  const accepted = all.filter((request) => request.status === "accepted").length;
+
+  totalCount.textContent = all.length;
+  pendingCount.textContent = pending;
+  acceptedCount.textContent = accepted;
+
+  const filtered = all.filter((request) => {
+    const statusOk =
+      state.activeFilter === "all" ||
+      (state.activeFilter === "pending" && request.status !== "accepted") ||
+      (state.activeFilter === "accepted" && request.status === "accepted");
+
+    return statusOk && matchesSearch(request, term);
+  });
+
+  if (!filtered.length) {
+    requestsList.innerHTML = `<div class="empty-state">No hay solicitudes para mostrar.</div>`;
+    return;
+  }
+
+  requestsList.innerHTML = "";
+  filtered.forEach((request) => {
+    const node = requestTemplate.content.firstElementChild.cloneNode(true);
+    const isAccepted = request.status === "accepted";
+
+    node.classList.toggle("is-accepted", isAccepted);
+    node.querySelector(".request-date").textContent = formatDate(request.submittedAt);
+    node.querySelector(".request-name").textContent = request.fullName || "Sin nombre";
+    node.querySelector(".request-status").textContent = isAccepted ? "Aceptada" : "Pendiente";
+    node.querySelector(".request-status").classList.toggle("accepted", isAccepted);
+    node.querySelector(".request-email").textContent = request.email || "—";
+    node.querySelector(".request-whatsapp").textContent = request.whatsapp || "—";
+    node.querySelector(".request-location").textContent = request.location || "—";
+    node.querySelector(".request-experience").textContent = request.experienceLevel || "—";
+    node.querySelector(".request-capital").textContent = request.availableCapital || "—";
+    node.querySelector(".request-interest").textContent = (request.accessInterest || []).join(", ") || "—";
+
+    const details = [
+      ["Edad", request.age],
+      ["Trabaja", request.working],
+      ["Ingreso mensual", request.monthlyIncome],
+      ["Mercados", (request.markets || []).join(", ")],
+      ["Pérdidas operando", request.tradingLosses],
+      ["Motivación", request.motivation],
+      ["Tiempo semanal", request.weeklyTime],
+      ["Código", request.id],
+    ];
+
+    node.querySelector(".details-grid").innerHTML = details.map(([label, value]) => `
+      <div>
+        <span>${escapeHtml(label)}</span>
+        <p>${escapeHtml(value || "—")}</p>
+      </div>
+    `).join("");
+
+    node.querySelector(".accept-btn").addEventListener("click", async () => {
+      try {
+        await acceptRequest(request);
+        window.open(buildWhatsappUrl(request.whatsapp, WHATSAPP_MESSAGE), "_blank", "noopener,noreferrer");
+        await refreshPanel();
+      } catch (error) {
+        alert("No se pudo aceptar la solicitud.");
+      }
+    });
+
+    node.querySelector(".delete-btn").addEventListener("click", async () => {
+      if (!confirm("¿Seguro que deseas eliminar esta solicitud?")) return;
+      try {
+        await deleteRequest(request);
+        await refreshPanel();
+      } catch (error) {
+        alert("No se pudo eliminar la solicitud.");
+      }
+    });
+
+    requestsList.appendChild(node);
+  });
+}
+
+
+function recoverLocalRecords() {
+  const recovered = readLocalRequests();
+  state.panelRequests = recovered;
+  renderRequests();
+  alert(`Recuperación completada. Registros encontrados: ${recovered.length}`);
+}
+
+function exportCsv() {
+  const rows = state.panelRequests.map((request) => ({
+    id: request.id,
+    status: request.status,
+    submittedAt: request.submittedAt,
+    fullName: request.fullName,
+    email: request.email,
+    whatsapp: request.whatsapp,
+    age: request.age,
+    location: request.location,
+    working: request.working,
+    monthlyIncome: request.monthlyIncome,
+    availableCapital: request.availableCapital,
+    experienceLevel: request.experienceLevel,
+    markets: (request.markets || []).join(" | "),
+    tradingLosses: request.tradingLosses,
+    motivation: request.motivation,
+    weeklyTime: request.weeklyTime,
+    accessInterest: (request.accessInterest || []).join(" | "),
+  }));
+
+  if (!rows.length) {
+    alert("No hay solicitudes para exportar.");
+    return;
+  }
+
+  const headers = Object.keys(rows[0]);
+  const csv = [
+    headers.join(","),
+    ...rows.map((row) =>
+      headers.map((header) => `"${String(row[header] ?? "").replaceAll('"', '""')}"`).join(",")
+    ),
+  ].join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `solicitudes-olon-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+backBtn.addEventListener("click", previousStep);
+nextBtn.addEventListener("click", nextStep);
+
+
+closeThanksBtn.addEventListener("click", closeThanksScreen);
+
+openPanelBtn.addEventListener("click", openPanel);
+closePanelBtn.addEventListener("click", closePanel);
+
+panelLoginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  await unlockPanel();
+});
+
+logoutBtn.addEventListener("click", async () => {
+  if (supabaseClient) {
+    try {
+      await supabaseClient.auth.signOut();
+    } catch (error) {
+      // no hacer nada
+    }
+  }
+  panelDashboard.classList.remove("open");
+  panelLogin.style.display = "";
+  closePanel();
+});
+
+recoverLocalBtn.addEventListener("click", recoverLocalRecords);
+exportBtn.addEventListener("click", exportCsv);
+
+searchRequests.addEventListener("input", renderRequests);
+
+filters.forEach((button) => {
+  button.addEventListener("click", () => {
+    state.activeFilter = button.dataset.filter;
+    filters.forEach((item) => item.classList.toggle("active", item === button));
+    renderRequests();
+  });
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeThanksScreen();
+    closePanel();
+  }
+});
+
+renderStep();
+
+  </script>
+</body>
+</html>

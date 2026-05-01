@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Olon Society Academy: comunidad de trading, VIP Regular, VIP Premium, mentoría 1 a 1, merch oficial y ranking de estudiantes." />
-  <title>Olon Society Academy | Trading, Comunidad e Indicadores</title>
+  <meta name="description" content="Olon Society Academy: academia privada de trading, comunidad, programas VIP, mentoría y herramientas para estudiantes." />
+  <title>Olon Society Academy | Academia Privada de Trading</title>
   <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon.png" />
   <link rel="shortcut icon" type="image/png" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/favicon.png" />
@@ -2102,6 +2102,492 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    /* ===== BLACK GOLD LUXURY + DASHBOARD WEB UPDATE ===== */
+    body {
+      color: rgba(255, 255, 255, 0.88);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(232, 185, 63, 0.18), transparent 32%),
+        radial-gradient(circle at 90% 18%, rgba(20, 91, 120, 0.22), transparent 30%),
+        linear-gradient(135deg, #03050a 0%, #07111d 45%, #020307 100%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(rgba(232, 185, 63, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 86px 86px;
+      mask-image: linear-gradient(to bottom, black, transparent 76%);
+    }
+
+    nav,
+    nav.scrolled {
+      color: var(--white);
+      background: rgba(3, 5, 10, 0.62);
+      border-bottom: 1px solid rgba(247, 214, 107, 0.12);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
+    }
+
+    nav.scrolled .hamburger {
+      color: var(--white);
+      border-color: rgba(247, 214, 107, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-cta,
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      color: #06101e !important;
+      border: 1px solid rgba(255, 224, 138, 0.6);
+      background: linear-gradient(135deg, #fff1ad 0%, #e8b93f 48%, #b57a17 100%);
+      box-shadow: 0 18px 48px rgba(232, 185, 63, 0.28);
+    }
+
+    .nav-cta::before,
+    .btn-primary::before {
+      content: "";
+      position: absolute;
+      inset: -30% auto -30% -40%;
+      width: 38%;
+      transform: skewX(-18deg);
+      background: rgba(255, 255, 255, 0.35);
+      transition: left 0.55s ease;
+    }
+
+    .nav-cta:hover::before,
+    .btn-primary:hover::before {
+      left: 120%;
+    }
+
+    .btn-secondary,
+    .btn-dark {
+      border: 1px solid rgba(247, 214, 107, 0.18);
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.075);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+    }
+
+    #hero.lux-hero {
+      min-height: 100svh;
+      display: block;
+      padding: 132px 5% 86px;
+      background:
+        radial-gradient(circle at 25% 18%, rgba(232, 185, 63, 0.22), transparent 30%),
+        radial-gradient(circle at 72% 24%, rgba(20, 91, 120, 0.28), transparent 32%),
+        linear-gradient(135deg, rgba(3, 5, 10, 0.96), rgba(7, 17, 29, 0.92)),
+        url("assets/hero-pattern.jpeg") center / cover no-repeat;
+    }
+
+    #hero.lux-hero::after {
+      background: linear-gradient(to bottom, transparent, #03050a);
+    }
+
+    .hero-lux-grid {
+      position: relative;
+      z-index: 2;
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(340px, 0.78fr);
+      align-items: center;
+      gap: clamp(26px, 5vw, 70px);
+    }
+
+    .lux-copy {
+      max-width: none;
+      text-align: left;
+      justify-items: start;
+    }
+
+    .lux-copy .hero-logo {
+      width: 180px;
+      max-width: 44vw;
+      margin-bottom: 24px;
+    }
+
+    .lux-copy .hero-badge {
+      justify-content: flex-start;
+      margin-left: 0;
+      margin-right: 0;
+      max-width: none;
+      width: auto;
+    }
+
+    .lux-copy .hero-title {
+      max-width: 11.5ch;
+      margin-left: 0;
+      font-size: clamp(3rem, 7.4vw, 6.9rem);
+      letter-spacing: -0.075em;
+      line-height: 0.96;
+    }
+
+    .lux-copy .hero-sub {
+      max-width: 660px;
+      margin-left: 0;
+      color: rgba(255, 255, 255, 0.74);
+    }
+
+    .lux-dashboard {
+      position: relative;
+      padding: clamp(22px, 3vw, 34px);
+      border: 1px solid rgba(247, 214, 107, 0.22);
+      border-radius: 32px;
+      background:
+        linear-gradient(145deg, rgba(232, 185, 63, 0.16), transparent 38%),
+        rgba(255, 255, 255, 0.075);
+      box-shadow: 0 34px 110px rgba(0, 0, 0, 0.42);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      overflow: hidden;
+    }
+
+    .lux-dashboard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, black, transparent 88%);
+    }
+
+    .dash-top,
+    .dash-main-card,
+    .dash-grid,
+    .dash-apply {
+      position: relative;
+      z-index: 1;
+    }
+
+    .dash-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .dash-kicker {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--gold-300);
+      font: 900 0.76rem "Sora", sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .dash-top h2 {
+      color: var(--white);
+      font-size: clamp(1.45rem, 3vw, 2.2rem);
+    }
+
+    .dash-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      border-radius: 999px;
+      color: #bfffe6;
+      background: rgba(52, 211, 153, 0.1);
+      font-weight: 900;
+      font-size: 0.76rem;
+    }
+
+    .dash-live::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: #34d399;
+      box-shadow: 0 0 0 6px rgba(52, 211, 153, 0.12);
+    }
+
+    .dash-main-card {
+      padding: 20px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(247, 214, 107, 0.2);
+      border-radius: 22px;
+      background: rgba(0, 0, 0, 0.22);
+    }
+
+    .dash-main-card span,
+    .dash-box small {
+      display: block;
+      color: rgba(255, 255, 255, 0.52);
+      font: 900 0.72rem "Sora", sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dash-main-card strong {
+      display: block;
+      margin: 8px 0;
+      color: var(--gold-300);
+      font-family: "Sora", sans-serif;
+      font-size: 1.3rem;
+    }
+
+    .dash-main-card p {
+      color: rgba(255, 255, 255, 0.68);
+      line-height: 1.58;
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .dash-box {
+      min-height: 132px;
+      display: grid;
+      align-content: space-between;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .dash-box strong {
+      color: var(--white);
+      font-family: "Sora", sans-serif;
+      font-size: 1.45rem;
+    }
+
+    .dash-box span {
+      color: rgba(255, 255, 255, 0.58);
+      font-weight: 800;
+      font-size: 0.86rem;
+    }
+
+    .dash-apply {
+      display: flex;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      color: #06101e;
+      background: linear-gradient(135deg, var(--gold-300), var(--gold-500));
+      font-family: "Sora", sans-serif;
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 0 18px 40px rgba(232, 185, 63, 0.22);
+    }
+
+    .lux-metrics {
+      position: relative;
+      z-index: 2;
+      max-width: 1040px;
+      margin-top: 38px;
+    }
+
+    .metric,
+    .plan-card,
+    .feature-card,
+    .rank-card,
+    .club-card,
+    .testimonial-card,
+    .contact-card,
+    .partner-card,
+    .badge-card {
+      border-color: rgba(247, 214, 107, 0.14);
+      background:
+        linear-gradient(145deg, rgba(232, 185, 63, 0.08), transparent 42%),
+        rgba(255, 255, 255, 0.065);
+      color: var(--white);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    section,
+    #merch,
+    #feedback,
+    #contacto,
+    #ranking,
+    #socios {
+      background:
+        radial-gradient(circle at 16% 0%, rgba(232, 185, 63, 0.09), transparent 26%),
+        linear-gradient(135deg, #03050a, #07111d 58%, #03050a);
+    }
+
+    .section-title,
+    #ranking .section-title,
+    #socios .section-title,
+    #ranking .section-sub,
+    #socios .section-sub {
+      color: var(--white);
+    }
+
+    .section-sub,
+    .plan-desc,
+    .plan-list li,
+    .price-note,
+    .feature-card p,
+    .contact-card p,
+    .partner-copy p {
+      color: rgba(255, 255, 255, 0.66);
+    }
+
+    .price-box {
+      border-color: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .price-box strong,
+    .plan-card h3,
+    .feature-card h3,
+    .contact-card h3,
+    .partner-copy h3 {
+      color: var(--white);
+    }
+
+    .price-box span {
+      color: rgba(255, 255, 255, 0.52);
+    }
+
+    .plan-card.featured {
+      background:
+        linear-gradient(145deg, rgba(232, 185, 63, 0.24), transparent 44%),
+        rgba(255, 255, 255, 0.085);
+    }
+
+    .access-strip {
+      padding: 42px 5%;
+      background: linear-gradient(135deg, #03050a, #07111d);
+    }
+
+    .access-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 24px;
+      padding: clamp(22px, 4vw, 36px);
+      border: 1px solid rgba(247, 214, 107, 0.22);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(232, 185, 63, 0.2), transparent 36%),
+        rgba(255, 255, 255, 0.07);
+      box-shadow: 0 34px 90px rgba(0, 0, 0, 0.28);
+    }
+
+    .access-panel h2 {
+      margin-bottom: 10px;
+      color: var(--white);
+      font-size: clamp(1.7rem, 4vw, 3rem);
+    }
+
+    .access-panel p {
+      max-width: 62ch;
+      color: rgba(255, 255, 255, 0.66);
+      line-height: 1.65;
+    }
+
+    .contact-apply {
+      width: 100%;
+      margin-top: 14px;
+    }
+
+    .floating-apply {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 140;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 54px;
+      padding: 0 20px;
+      border: 1px solid rgba(255, 224, 138, 0.55);
+      border-radius: 999px;
+      color: #06101e;
+      background: linear-gradient(135deg, #fff1ad, #e8b93f);
+      box-shadow: 0 18px 42px rgba(232, 185, 63, 0.32);
+      font-family: "Sora", sans-serif;
+      font-size: 0.88rem;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .floating-apply span {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      color: var(--white);
+      background: rgba(5, 16, 29, 0.9);
+    }
+
+    @media (max-width: 980px) {
+      .hero-lux-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .lux-copy {
+        text-align: center;
+        justify-items: center;
+      }
+
+      .lux-copy .hero-title,
+      .lux-copy .hero-sub {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .lux-copy .hero-badge {
+        justify-content: center;
+      }
+
+      .lux-dashboard {
+        width: min(720px, 100%);
+        margin: 0 auto;
+      }
+
+      .access-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .access-panel .btn-primary {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 680px) {
+      #hero.lux-hero {
+        padding: 104px 6% 54px;
+      }
+
+      .lux-copy .hero-title {
+        font-size: clamp(2.4rem, 12vw, 3.3rem);
+      }
+
+      .dash-grid,
+      .lux-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .floating-apply {
+        left: 14px;
+        right: 14px;
+        justify-content: center;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -2113,7 +2599,8 @@
     <a href="#socios" onclick="closeMobileMenu()">Socios</a>
     <a href="#feedback" onclick="closeMobileMenu()">Feedback</a>
     <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
-    <a href="#" onclick="openAuthModal('signup'); closeMobileMenu(); return false;">Refiere y Gana</a>
+    <a href="solicitud.html" onclick="closeMobileMenu()">Solicitar acceso</a>
+    <a href="#" onclick="openAuthModal('signup'); closeMobileMenu(); return false;">Referidos</a>
   </div>
 
   <nav id="navbar">
@@ -2127,7 +2614,8 @@
       <li><a href="#ranking">Ranking</a></li>
       <li><a href="#socios">Socios</a></li>
       <li><a href="#feedback">Feedback</a></li>
-      <li><a href="#" onclick="openAuthModal('signup'); return false;" class="nav-cta"><span class="btn-icon">+</span> Refiere y Gana</a></li>
+      <li><a href="#" onclick="openAuthModal('signup'); return false;">Referidos</a></li>
+      <li><a href="solicitud.html" class="nav-cta"><span class="btn-icon">+</span> Solicitar acceso</a></li>
     </ul>
     <button class="hamburger" type="button" onclick="openMobileMenu()" aria-label="Abrir menú">
       <span></span>
@@ -2268,43 +2756,96 @@
     </div>
   </div>
 
-  <section id="hero">
-    <div class="hero-content">
-      <img src="assets/olon-logo.png" class="hero-logo" alt="Olon Society Academy" />
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        <span>Trading Academy</span>
-        <span>|</span>
-        <span>Comunidad</span>
-        <span>|</span>
-        <span>Indicadores</span>
+  <section id="hero" class="lux-hero">
+    <div class="hero-lux-grid">
+      <div class="hero-content lux-copy">
+        <img src="assets/olon-logo.png" class="hero-logo" alt="Olon Society Academy" />
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>Academia privada</span>
+          <span>|</span>
+          <span>Comunidad</span>
+          <span>|</span>
+          <span>Herramientas</span>
+        </div>
+        <h1 class="hero-title">Aprende trading con una comunidad de <em>alto nivel</em></h1>
+        <p class="hero-sub">
+          Entra a un ecosistema privado creado para estudiantes que quieren estructura, disciplina, educación, herramientas y seguimiento dentro del mercado.
+        </p>
+        <div class="hero-actions">
+          <a href="solicitud.html" class="btn-primary"><span class="btn-icon">+</span> Solicitar acceso</a>
+          <a href="#planes" class="btn-secondary"><span class="btn-icon">↓</span> Ver programas</a>
+        </div>
       </div>
-      <h1 class="hero-title">Olon Society <em>Academy</em></h1>
-      <p class="hero-sub">
-        Una comunidad creada para aprender trading con estructura, herramientas premium, clases estratégicas y acompañamiento para fortalecer tu lectura del mercado.
-      </p>
-      <div class="hero-actions">
-        <a href="#planes" class="btn-primary"><span class="btn-icon">$</span> Ver planes</a>
-        <a href="https://wa.me/17879048668?text=Hola%2C%20quiero%20informacion%20sobre%20Olon%20Society%20Academy" target="_blank" rel="noopener noreferrer" class="btn-secondary"><span class="btn-icon">W</span> WhatsApp</a>
+
+      <aside class="lux-dashboard reveal delay-1" aria-label="Resumen de la academia">
+        <div class="dash-top">
+          <div>
+            <span class="dash-kicker">Olon Society</span>
+            <h2>Private Trading Hub</h2>
+          </div>
+          <span class="dash-live">Activo</span>
+        </div>
+
+        <div class="dash-main-card">
+          <span>Ruta del estudiante</span>
+          <strong>Aplicar → Evaluación → Acceso</strong>
+          <p>Primero revisamos tu perfil. Si cualificas, recibes los próximos pasos.</p>
+        </div>
+
+        <div class="dash-grid">
+          <div class="dash-box">
+            <small>Programas</small>
+            <strong>VIP</strong>
+            <span>Regular / Premium</span>
+          </div>
+          <div class="dash-box">
+            <small>Herramientas</small>
+            <strong>OLFX</strong>
+            <span>Indicadores</span>
+          </div>
+          <div class="dash-box">
+            <small>Comunidad</small>
+            <strong>Rankings</strong>
+            <span>Logros mensuales</span>
+          </div>
+          <div class="dash-box">
+            <small>Mentoría</small>
+            <strong>1:1</strong>
+            <span>Acceso privado</span>
+          </div>
+        </div>
+
+        <a href="solicitud.html" class="dash-apply">Completar solicitud</a>
+      </aside>
+    </div>
+
+    <div class="hero-metrics lux-metrics" aria-label="Resumen de beneficios">
+      <div class="metric">
+        <strong>VIP</strong>
+        <span>Comunidad privada</span>
       </div>
-      <div class="hero-metrics" aria-label="Resumen de beneficios">
-        <div class="metric">
-          <strong>VIP</strong>
-          <span>Comunidad y bonos</span>
-        </div>
-        <div class="metric">
-          <strong>PRO</strong>
-          <span>OLFX System</span>
-        </div>
-        <div class="metric">
-          <strong>10</strong>
-          <span>Personas por clase</span>
-        </div>
+      <div class="metric">
+        <strong>PRO</strong>
+        <span>Herramientas OLFX</span>
+      </div>
+      <div class="metric">
+        <strong>1:1</strong>
+        <span>Mentoría privada</span>
       </div>
     </div>
-    <div class="hero-scroll" aria-hidden="true">
-      <span>Explorar</span>
-      <div class="scroll-line"></div>
+  </section>
+
+  <section id="acceso" class="access-strip">
+    <div class="section-inner">
+      <div class="access-panel reveal">
+        <div>
+          <span class="section-tag">Solicitud privada</span>
+          <h2>¿Quieres entrar a Olon Society Academy?</h2>
+          <p>Completa tu solicitud y nuestro equipo revisará tu perfil antes de darte los próximos pasos.</p>
+        </div>
+        <a href="solicitud.html" class="btn-primary"><span class="btn-icon">+</span> Solicitar acceso</a>
+      </div>
     </div>
   </section>
 
@@ -2575,7 +3116,7 @@
         <span class="section-tag">Contacto</span>
         <h2 class="section-title">Empieza con Olon Society Academy</h2>
         <p class="section-sub">
-          Solicita acceso, confirma tu plan o compra directamente escribiéndonos por WhatsApp.
+          Solicita acceso y nuestro equipo revisará tu perfil antes de darte los próximos pasos.
         </p>
       </div>
 
@@ -2604,9 +3145,9 @@
         </article>
 
         <article class="contact-card dark reveal delay-2">
-          <h3>Comprar por WhatsApp</h3>
+          <h3>Accesos disponibles</h3>
           <p>
-            Selecciona el acceso que quieres activar y te llevamos directo al chat con el mensaje listo.
+            Explora los accesos principales. Para entrar formalmente, completa primero la solicitud privada.
           </p>
           <div class="quick-contact-list">
             <a class="quick-contact" href="https://wa.me/17879048668?text=Hola%2C%20quiero%20comprar%20VIP%20Regular%20mensual%20de%20%24100." target="_blank" rel="noopener noreferrer">
@@ -2622,6 +3163,7 @@
               <span>$500 precio único</span>
             </a>
           </div>
+          <a class="btn-primary contact-apply" href="solicitud.html"><span class="btn-icon">+</span> Solicitar acceso</a>
           <p class="disclaimer">
             Aviso: el contenido es educativo y no constituye asesoría financiera. Opera con responsabilidad y gestiona tu riesgo.
           </p>
@@ -2642,6 +3184,8 @@
       <a href="#contacto">Contacto</a>
     </div>
   </footer>
+
+  <a class="floating-apply" href="solicitud.html"><span>+</span> Solicitar acceso</a>
 
   <div class="lightbox" id="lightbox" onclick="closeLightbox()" aria-hidden="true">
     <button type="button" onclick="closeLightbox()" aria-label="Cerrar imagen">&times;</button>
