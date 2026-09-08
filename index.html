@@ -2700,6 +2700,19 @@
             </div>
             <button class="btn-dark" type="button" onclick="downloadOwnerCsv()">Exportar CSV</button>
           </div>
+          <div class="owner-code-lookup" style="margin: 18px 0 22px; padding: 18px; border: 1px solid rgba(247, 214, 107, 0.28); border-radius: 16px; background: rgba(255,255,255,0.06);">
+            <h3 style="margin: 0 0 8px;">Verificar código de referido</h3>
+            <p class="referral-copy" style="margin: 0 0 14px;">Escribe un código para confirmar a quién le pertenece antes de validar un referido o premio.</p>
+            <div style="display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:end;">
+              <div class="auth-field" style="margin:0;">
+                <label for="ownerReferralLookup">Código de referido</label>
+                <input id="ownerReferralLookup" type="text" placeholder="Ej. OLON-JP8K2F" autocomplete="off" oninput="this.value = this.value.toUpperCase()" />
+              </div>
+              <button class="btn-primary" type="button" onclick="verifyReferralOwner()"><span class="btn-icon">⌕</span> Verificar</button>
+            </div>
+            <div id="ownerReferralLookupResult" style="display:none; margin-top:14px;"></div>
+          </div>
+
           <div class="owner-table-wrap" id="ownerTableWrap"></div>
           <div class="owner-community">
             <h3>Editar reconocimientos</h3>
@@ -3216,6 +3229,7 @@
       ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
       : null;
     const ownerEmail = "infolonsocietyacademy@gmail.com";
+    const ownerPassword = "NOLOFX";
     let activeReferral = null;
     let ownerSignedIn = false;
     let ownerMembersCache = [];
@@ -3574,6 +3588,62 @@
       return data || [];
     }
 
+    async function verifyReferralOwner() {
+      const input = document.getElementById("ownerReferralLookup");
+      const result = document.getElementById("ownerReferralLookupResult");
+      const code = (input?.value || "").trim().toUpperCase();
+
+      if (!result) return;
+
+      if (!ownerSignedIn) {
+        result.style.display = "block";
+        result.innerHTML = '<div class="owner-empty">Debes iniciar sesión como Owner para verificar códigos.</div>';
+        return;
+      }
+
+      if (!code) {
+        result.style.display = "block";
+        result.innerHTML = '<div class="owner-empty">Escribe un código de referido.</div>';
+        return;
+      }
+
+      if (!supabaseClient) {
+        result.style.display = "block";
+        result.innerHTML = '<div class="owner-empty">Supabase no está disponible.</div>';
+        return;
+      }
+
+      result.style.display = "block";
+      result.innerHTML = '<div class="owner-empty">Buscando código...</div>';
+
+      const { data, error } = await supabaseClient
+        .from("referrals")
+        .select("id,name,email,phone,code,created_at")
+        .eq("code", code)
+        .maybeSingle();
+
+      if (error) {
+        result.innerHTML = `<div class="owner-empty">${escapeHtml(error.message || "No se pudo verificar el código.")}</div>`;
+        return;
+      }
+
+      if (!data) {
+        result.innerHTML = `<div class="owner-empty"><strong>Código no encontrado:</strong> ${escapeHtml(code)}</div>`;
+        return;
+      }
+
+      result.innerHTML = `
+        <div style="padding:16px; border-radius:14px; background:rgba(247,214,107,0.10); border:1px solid rgba(247,214,107,0.25);">
+          <div style="font-weight:800; margin-bottom:10px;">✓ Código verificado</div>
+          <div><strong>Código:</strong> ${escapeHtml(data.code || "-")}</div>
+          <div><strong>Dueño:</strong> ${escapeHtml(data.name || "-")}</div>
+          <div><strong>Email:</strong> ${escapeHtml(data.email || "-")}</div>
+          <div><strong>Teléfono:</strong> ${escapeHtml(data.phone || "No registrado")}</div>
+          <div><strong>Creado:</strong> ${escapeHtml(formatDate(data.created_at))}</div>
+        </div>
+      `;
+    }
+
     async function renderOwnerDashboard() {
       const wrap = document.getElementById("ownerTableWrap");
       wrap.innerHTML = '<div class="owner-empty">Cargando registros...</div>';
@@ -3842,23 +3912,22 @@
 
       if (!requireSupabase(messageEl)) return;
 
-      if (email !== ownerEmail) {
-        messageEl.textContent = "Este acceso es solo para el owner.";
+      if (email !== ownerEmail || password !== ownerPassword) {
+        messageEl.textContent = "Email o password incorrecto.";
         return;
       }
 
-      messageEl.textContent = "Entrando...";
-      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      ownerSignedIn = true;
+      messageEl.textContent = "";
+      event.target.reset();
+      switchAuthTab("owner");
+    });
 
-      if (!error) {
-        ownerSignedIn = true;
-        messageEl.textContent = "";
-        event.target.reset();
-        switchAuthTab("owner");
-        return;
+    document.getElementById("ownerReferralLookup")?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        verifyReferralOwner();
       }
-
-      messageEl.textContent = "Email o password incorrecto, o el usuario owner no existe en Supabase Auth.";
     });
 
     const reveals = document.querySelectorAll(".reveal");
