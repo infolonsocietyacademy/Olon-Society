@@ -3211,6 +3211,101 @@
       : null;
     const ownerEmail = "infolonsocietyacademy@gmail.com";
     const ownerPassword = "NOLOFX";
+    const referralStorageKey = "olon_referrals_local_v2";
+
+    function readLocalReferrals() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(referralStorageKey) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        console.warn("No se pudo leer el respaldo local de referidos:", error);
+        return [];
+      }
+    }
+
+    function writeLocalReferrals(members) {
+      try {
+        localStorage.setItem(referralStorageKey, JSON.stringify(members));
+      } catch (error) {
+        console.warn("No se pudo guardar el respaldo local de referidos:", error);
+      }
+    }
+
+    function cacheLocalReferral(member, localOnly = false) {
+      const members = readLocalReferrals();
+      const normalizedEmail = String(member.email || "").trim().toLowerCase();
+      const index = members.findIndex((item) =>
+        String(item.code || "").toUpperCase() === String(member.code || "").toUpperCase() ||
+        (normalizedEmail && String(item.email || "").trim().toLowerCase() === normalizedEmail)
+      );
+      const cached = { ...member, local_only: Boolean(localOnly) };
+      if (index >= 0) members[index] = { ...members[index], ...cached };
+      else members.unshift(cached);
+      writeLocalReferrals(members);
+      return cached;
+    }
+
+    function removeLocalReferral(memberId) {
+      const members = readLocalReferrals().filter((member) => String(member.id) !== String(memberId));
+      writeLocalReferrals(members);
+    }
+
+    function mergeReferralLists(primary = [], secondary = []) {
+      const map = new Map();
+      [...secondary, ...primary].forEach((member) => {
+        const key = String(member.code || member.email || member.id || "").toUpperCase();
+        if (key) map.set(key, member);
+      });
+      return Array.from(map.values()).sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+    }
+
+    async function syncLocalReferrals() {
+      if (!supabaseClient) return;
+      const members = readLocalReferrals();
+      let changed = false;
+
+      for (let i = 0; i < members.length; i++) {
+        const member = members[i];
+        if (!member.local_only) continue;
+
+        try {
+          const { data, error } = await supabaseClient
+            .from("referrals")
+            .insert({
+              name: member.name,
+              email: member.email,
+              phone: member.phone || null,
+              code: member.code
+            })
+            .select("id,name,email,phone,code,created_at")
+            .single();
+
+          if (!error && data) {
+            members[i] = { ...data, local_only: false };
+            changed = true;
+            continue;
+          }
+
+          const errorText = `${error?.message || ""} ${error?.details || ""}`.toLowerCase();
+          if (error?.code === "23505" && errorText.includes("email")) {
+            const { data: existing } = await supabaseClient
+              .from("referrals")
+              .select("id,name,email,phone,code,created_at")
+              .eq("email", member.email)
+              .maybeSingle();
+            if (existing) {
+              members[i] = { ...existing, local_only: false };
+              changed = true;
+            }
+          }
+        } catch (error) {
+          console.warn("Supabase sigue sin responder; se mantiene el respaldo local.", error);
+          break;
+        }
+      }
+
+      if (changed) writeLocalReferrals(members);
+    }
     let activeReferral = null;
     let ownerSignedIn = false;
     let ownerMembersCache = [];
@@ -3527,7 +3622,7 @@
       textEl.textContent = `Cuando alguien escriba por WhatsApp puede decir: "Fui recomendado por ${member.name} con el código ${member.code}".`;
       whatsappEl.href = `https://wa.me/17879048668?text=${encodeURIComponent(message)}`;
       result.classList.add("open");
-      document.getElementById("signupMessage").textContent = reused ? "Este email ya tenía un código creado." : "Registro creado correctamente.";
+      document.getElementById("signupMessage").textContent = reused ? "Este email ya tenía un código creado." : "Código creado correctamente.";
     }
 
     function copyReferralCode() {
@@ -3571,14 +3666,24 @@
     }
 
     async function fetchMembers() {
-      if (!supabaseClient) return [];
-      const { data, error } = await supabaseClient
-        .from("referrals")
-        .select("id,name,email,phone,code,created_at")
-        .order("created_at", { ascending: false });
+      const localMembers = readLocalReferrals();
+      if (!supabaseClient) return localMembers;
 
-      if (error) throw error;
-      return data || [];
+      try {
+        await syncLocalReferrals();
+        const { data, error } = await supabaseClient
+          .from("referrals")
+          .select("id,name,email,phone,code,created_at")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+        const remoteMembers = data || [];
+        remoteMembers.forEach((member) => cacheLocalReferral(member, false));
+        return mergeReferralLists(remoteMembers, readLocalReferrals());
+      } catch (error) {
+        console.warn("No se pudieron cargar referidos desde Supabase; usando respaldo local.", error);
+        return readLocalReferrals();
+      }
     }
 
     async function verifyReferralOwner() {
@@ -3600,24 +3705,28 @@
         return;
       }
 
-      if (!supabaseClient) {
-        result.style.display = "block";
-        result.innerHTML = '<div class="owner-empty">Supabase no está disponible.</div>';
-        return;
-      }
-
       result.style.display = "block";
       result.innerHTML = '<div class="owner-empty">Buscando código...</div>';
 
-      const { data, error } = await supabaseClient
-        .from("referrals")
-        .select("id,name,email,phone,code,created_at")
-        .eq("code", code)
-        .maybeSingle();
+      let data = null;
+      if (supabaseClient) {
+        try {
+          const response = await supabaseClient
+            .from("referrals")
+            .select("id,name,email,phone,code,created_at")
+            .eq("code", code)
+            .maybeSingle();
+          if (!response.error && response.data) {
+            data = response.data;
+            cacheLocalReferral(data, false);
+          }
+        } catch (error) {
+          console.warn("Verificación remota no disponible; buscando en respaldo local.", error);
+        }
+      }
 
-      if (error) {
-        result.innerHTML = `<div class="owner-empty">${escapeHtml(error.message || "No se pudo verificar el código.")}</div>`;
-        return;
+      if (!data) {
+        data = readLocalReferrals().find((member) => String(member.code || "").toUpperCase() === code) || null;
       }
 
       if (!data) {
@@ -3729,17 +3838,23 @@
     }
 
     async function deleteMember(memberId) {
-      if (!memberId || !supabaseClient) return;
+      if (!memberId) return;
       if (!confirm("¿Eliminar este registro?")) return;
 
-      const { error } = await supabaseClient
-        .from("referrals")
-        .delete()
-        .eq("id", memberId);
+      const localMember = readLocalReferrals().find((member) => String(member.id) === String(memberId));
+      removeLocalReferral(memberId);
 
-      if (error) {
-        alert(error.message || "No se pudo eliminar el registro.");
-        return;
+      if (supabaseClient && !String(memberId).startsWith("local-")) {
+        try {
+          const { error } = await supabaseClient
+            .from("referrals")
+            .delete()
+            .eq("id", memberId);
+          if (error) throw error;
+        } catch (error) {
+          console.warn("No se pudo eliminar en Supabase; se eliminó del respaldo local.", error);
+          if (localMember) cacheLocalReferral(localMember, Boolean(localMember.local_only));
+        }
       }
 
       renderOwnerDashboard();
@@ -3799,33 +3914,72 @@
     });
 
     async function createReferral(name, email, phone) {
+      const normalizedEmail = String(email || "").trim().toLowerCase();
+      const localExisting = readLocalReferrals().find((member) =>
+        String(member.email || "").trim().toLowerCase() === normalizedEmail
+      );
+      if (localExisting) return { ...localExisting, __reused: true };
+
       for (let attempt = 0; attempt < 5; attempt++) {
         const member = {
+          id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
           name,
-          email,
+          email: normalizedEmail,
           phone: phone || null,
           code: makeReferralCode(name),
           created_at: new Date().toISOString()
         };
 
-        const { error } = await supabaseClient
-          .from("referrals")
-          .insert({
-            name: member.name,
-            email: member.email,
-            phone: member.phone,
-            code: member.code
-          });
+        const codeAlreadyExists = readLocalReferrals().some((item) =>
+          String(item.code || "").toUpperCase() === member.code.toUpperCase()
+        );
+        if (codeAlreadyExists) continue;
 
-        if (!error) return member;
-
-        const errorText = `${error.message || ""} ${error.details || ""}`.toLowerCase();
-        if (error.code === "23505" && errorText.includes("code")) continue;
-        if (error.code === "23505" && errorText.includes("email")) {
-          throw new Error("Ese email ya está registrado. Si necesitas tu código, escríbenos por WhatsApp.");
+        if (!supabaseClient) {
+          return cacheLocalReferral(member, true);
         }
 
-        throw error;
+        try {
+          const { data, error } = await supabaseClient
+            .from("referrals")
+            .insert({
+              name: member.name,
+              email: member.email,
+              phone: member.phone,
+              code: member.code
+            })
+            .select("id,name,email,phone,code,created_at")
+            .single();
+
+          if (!error && data) {
+            return cacheLocalReferral(data, false);
+          }
+
+          const errorText = `${error?.message || ""} ${error?.details || ""}`.toLowerCase();
+          if (error?.code === "23505" && errorText.includes("code")) continue;
+
+          if (error?.code === "23505" && errorText.includes("email")) {
+            try {
+              const { data: existing } = await supabaseClient
+                .from("referrals")
+                .select("id,name,email,phone,code,created_at")
+                .eq("email", normalizedEmail)
+                .maybeSingle();
+              if (existing) return { ...cacheLocalReferral(existing, false), __reused: true };
+            } catch (lookupError) {
+              console.warn("No se pudo recuperar el código existente.", lookupError);
+            }
+            throw new Error("Ese email ya está registrado. Si necesitas tu código, escríbenos por WhatsApp.");
+          }
+
+          // Si Supabase rechaza por red/permisos, el visitante no se queda bloqueado:
+          // se guarda un respaldo local y se intentará sincronizar cuando vuelva la conexión.
+          console.warn("Supabase no aceptó el registro; creando respaldo local.", error);
+          return cacheLocalReferral(member, true);
+        } catch (error) {
+          console.warn("Supabase no respondió; creando respaldo local.", error);
+          return cacheLocalReferral(member, true);
+        }
       }
 
       throw new Error("No se pudo generar un código único. Intenta otra vez.");
@@ -3879,8 +4033,6 @@
       const phone = document.getElementById("memberPhone").value.trim();
       const messageEl = document.getElementById("signupMessage");
 
-      if (!requireSupabase(messageEl)) return;
-
       if (!name || !email) {
         messageEl.textContent = "Completa nombre y email para crear tu código.";
         return;
@@ -3890,7 +4042,7 @@
 
       try {
         const member = await createReferral(name, email, phone);
-        showReferral(member);
+        showReferral(member, Boolean(member.__reused));
         event.target.reset();
       } catch (error) {
         console.error("Referral signup error:", error);
@@ -3903,8 +4055,6 @@
       const email = document.getElementById("ownerEmail").value.trim().toLowerCase();
       const password = document.getElementById("ownerPassword").value;
       const messageEl = document.getElementById("ownerMessage");
-
-      if (!requireSupabase(messageEl)) return;
 
       if (email !== ownerEmail || password !== ownerPassword) {
         messageEl.textContent = "Email o password incorrecto.";
