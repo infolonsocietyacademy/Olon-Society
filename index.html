@@ -3313,15 +3313,27 @@
 
     function requireSupabase(messageEl) {
       if (isSupabaseReady) return true;
-      const missingConfig = !supabaseConfig.url ||
-        !supabaseConfig.anonKey ||
-        supabaseConfig.url.includes("PASTE_") ||
-        supabaseConfig.anonKey.includes("PASTE_");
-
-      messageEl.textContent = missingConfig
-        ? "Falta configurar Supabase. Pega tu URL y anon key en supabase-config.js."
-        : "No se pudo cargar Supabase. Refresca con Ctrl + F5 y verifica que el navegador tenga internet.";
+      // No mostramos detalles técnicos al visitante.
+      messageEl.textContent = "El sistema de referidos no está disponible en este momento. Intenta nuevamente en unos segundos.";
       return false;
+    }
+
+    function getReferralFriendlyError(error) {
+      const raw = `${error?.message || ""} ${error?.details || ""}`.toLowerCase();
+
+      if (error instanceof TypeError || raw.includes("failed to fetch") || raw.includes("networkerror") || raw.includes("network request failed")) {
+        return "No se pudo conectar con el sistema de referidos. Intenta nuevamente en unos segundos.";
+      }
+
+      if (raw.includes("row-level security") || raw.includes("permission denied") || raw.includes("not allowed")) {
+        return "El sistema de referidos está temporalmente en mantenimiento. Intenta nuevamente más tarde.";
+      }
+
+      if (raw.includes("relation") && raw.includes("does not exist")) {
+        return "El sistema de referidos está temporalmente en mantenimiento. Intenta nuevamente más tarde.";
+      }
+
+      return "No se pudo crear tu código en este momento. Intenta nuevamente.";
     }
 
     function escapeHtml(value) {
@@ -3881,7 +3893,8 @@
         showReferral(member);
         event.target.reset();
       } catch (error) {
-        messageEl.textContent = error.message || "No se pudo crear el registro. Intenta otra vez.";
+        console.error("Referral signup error:", error);
+        messageEl.textContent = getReferralFriendlyError(error);
       }
     });
 
