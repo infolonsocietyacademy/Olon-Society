@@ -2633,8 +2633,8 @@
       <button class="auth-close" type="button" onclick="closeAuthModal()" aria-label="Cerrar">&times;</button>
       <div class="auth-header">
         <img src="assets/olon-mark.png" onerror="this.onerror=null;this.src=window.OLON_MARK_FALLBACK;" alt="Logo Olon" />
-        <h2 id="authTitle">Acceso Olon Society</h2>
-        <p>Regístrate para recibir tu código de referido y poder recibir 50$ como recompensa.</p>
+        <h2 id="authTitle">Programa de Referidos Olon Society</h2>
+        <p>Regístrate gratis, recibe tu código personal y compártelo para participar por la recompensa de $50.</p>
       </div>
 
       <div class="auth-tabs" role="tablist">
@@ -3915,74 +3915,66 @@
 
     async function createReferral(name, email, phone) {
       const normalizedEmail = String(email || "").trim().toLowerCase();
+
+      // 1) Si este email ya tiene un código en este navegador, reutilizarlo al instante.
       const localExisting = readLocalReferrals().find((member) =>
         String(member.email || "").trim().toLowerCase() === normalizedEmail
       );
       if (localExisting) return { ...localExisting, __reused: true };
 
-      for (let attempt = 0; attempt < 5; attempt++) {
-        const member = {
+      // 2) Crear el código PRIMERO, sin esperar a Supabase ni a internet.
+      let member = null;
+      for (let attempt = 0; attempt < 10; attempt++) {
+        const candidate = {
           id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
           name,
           email: normalizedEmail,
           phone: phone || null,
           code: makeReferralCode(name),
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
+          local_only: true
         };
 
-        const codeAlreadyExists = readLocalReferrals().some((item) =>
-          String(item.code || "").toUpperCase() === member.code.toUpperCase()
+        const duplicate = readLocalReferrals().some((item) =>
+          String(item.code || "").toUpperCase() === candidate.code.toUpperCase()
         );
-        if (codeAlreadyExists) continue;
-
-        if (!supabaseClient) {
-          return cacheLocalReferral(member, true);
-        }
-
-        try {
-          const { data, error } = await supabaseClient
-            .from("referrals")
-            .insert({
-              name: member.name,
-              email: member.email,
-              phone: member.phone,
-              code: member.code
-            })
-            .select("id,name,email,phone,code,created_at")
-            .single();
-
-          if (!error && data) {
-            return cacheLocalReferral(data, false);
-          }
-
-          const errorText = `${error?.message || ""} ${error?.details || ""}`.toLowerCase();
-          if (error?.code === "23505" && errorText.includes("code")) continue;
-
-          if (error?.code === "23505" && errorText.includes("email")) {
-            try {
-              const { data: existing } = await supabaseClient
-                .from("referrals")
-                .select("id,name,email,phone,code,created_at")
-                .eq("email", normalizedEmail)
-                .maybeSingle();
-              if (existing) return { ...cacheLocalReferral(existing, false), __reused: true };
-            } catch (lookupError) {
-              console.warn("No se pudo recuperar el código existente.", lookupError);
-            }
-            throw new Error("Ese email ya está registrado. Si necesitas tu código, escríbenos por WhatsApp.");
-          }
-
-          // Si Supabase rechaza por red/permisos, el visitante no se queda bloqueado:
-          // se guarda un respaldo local y se intentará sincronizar cuando vuelva la conexión.
-          console.warn("Supabase no aceptó el registro; creando respaldo local.", error);
-          return cacheLocalReferral(member, true);
-        } catch (error) {
-          console.warn("Supabase no respondió; creando respaldo local.", error);
-          return cacheLocalReferral(member, true);
+        if (!duplicate) {
+          member = candidate;
+          break;
         }
       }
 
-      throw new Error("No se pudo generar un código único. Intenta otra vez.");
+      if (!member) {
+        // Respaldo extremo: aun si localStorage estuviera bloqueado, generamos uno visible.
+        member = {
+          id: `local-${Date.now()}`,
+          name,
+          email: normalizedEmail,
+          phone: phone || null,
+          code: makeReferralCode(name),
+          created_at: new Date().toISOString(),
+          local_only: true
+        };
+      }
+
+      // Guardar localmente cuando el navegador lo permita. Esto nunca debe bloquear al usuario.
+      try {
+        member = cacheLocalReferral(member, true);
+      } catch (localError) {
+        console.warn("No se pudo guardar localmente el referido, pero el código sí fue creado.", localError);
+      }
+
+      // 3) Intentar sincronizar con Supabase DESPUÉS, en segundo plano.
+      // Nunca esperamos esta petición para enseñar el código al usuario.
+      if (supabaseClient) {
+        setTimeout(() => {
+          syncLocalReferrals().catch((syncError) => {
+            console.warn("Sincronización de referidos pendiente.", syncError);
+          });
+        }, 0);
+      }
+
+      return member;
     }
 
     document.getElementById("communityForm").addEventListener("submit", async (event) => {
@@ -4046,7 +4038,20 @@
         event.target.reset();
       } catch (error) {
         console.error("Referral signup error:", error);
-        messageEl.textContent = getReferralFriendlyError(error);
+
+        // Último respaldo: aunque falle almacenamiento o conexión, nunca bloqueamos la creación.
+        const emergencyMember = {
+          id: `emergency-${Date.now()}`,
+          name,
+          email: String(email || "").trim().toLowerCase(),
+          phone: phone || null,
+          code: makeReferralCode(name),
+          created_at: new Date().toISOString(),
+          local_only: true
+        };
+        try { cacheLocalReferral(emergencyMember, true); } catch (_) {}
+        showReferral(emergencyMember, false);
+        event.target.reset();
       }
     });
 
