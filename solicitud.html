@@ -9,7 +9,7 @@
   <link rel="apple-touch-icon" href="assets/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..800&display=swap" rel="stylesheet" />
   <script>
 window.OLON_SUPABASE = {
   // Supabase Dashboard > Project Settings > API > Project URL
@@ -70,7 +70,7 @@ body {
     radial-gradient(circle at 18% 10%, rgba(232, 185, 63, 0.18), transparent 30%),
     radial-gradient(circle at 90% 24%, rgba(56, 189, 248, 0.12), transparent 28%),
     linear-gradient(135deg, #050913, #08101f 55%, #03050b);
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--terminal-mono);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -155,7 +155,7 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-weight: 900;
   letter-spacing: -0.02em;
 }
@@ -189,7 +189,7 @@ a {
   padding: 0 18px;
   color: var(--text);
   background: rgba(255, 255, 255, 0.08);
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-size: 0.82rem;
   font-weight: 900;
   transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
@@ -274,7 +274,7 @@ a {
   gap: 9px;
   margin-bottom: 18px;
   color: var(--gold-2);
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-size: 0.76rem;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -294,7 +294,7 @@ a {
 h1,
 h2,
 h3 {
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   line-height: 1.06;
   letter-spacing: -0.05em;
 }
@@ -331,7 +331,7 @@ h3 {
 .stats-grid strong {
   display: block;
   color: var(--gold-2);
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-size: 1.45rem;
 }
 
@@ -356,7 +356,7 @@ h3 {
   display: block;
   margin-bottom: 8px;
   color: var(--gold-2);
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-weight: 900;
 }
 
@@ -384,7 +384,7 @@ h3 {
   display: block;
   margin-bottom: 7px;
   color: var(--gold-2);
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-size: 0.78rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -427,7 +427,7 @@ h3 {
 }
 
 .progress-ring strong {
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-size: 0.78rem;
 }
 
@@ -478,7 +478,7 @@ h3 {
 
 .step-number {
   color: var(--gold-2);
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-size: 0.84rem;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -606,7 +606,7 @@ h3 {
   display: block;
   margin-bottom: 6px;
   color: var(--gold-2);
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -838,7 +838,7 @@ h3 {
 
 .full-profile summary {
   color: var(--gold-2);
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-weight: 900;
   cursor: pointer;
   margin-bottom: 12px;
@@ -1030,7 +1030,7 @@ h3 {
   border-radius: 999px;
   color: #06101e;
   background: linear-gradient(135deg, var(--gold-2), var(--gold));
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-size: 2.2rem;
   font-weight: 900;
   box-shadow: 0 18px 44px rgba(232, 185, 63, 0.28);
@@ -1042,7 +1042,7 @@ h3 {
   justify-content: center;
   margin-bottom: 14px;
   color: var(--gold-2);
-  font-family: "Sora", sans-serif;
+  font-family: var(--terminal-mono);
   font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -1076,8 +1076,9 @@ h3 {
 }
 
   </style>
+  <link rel="stylesheet" href="academy-terminal.css?v=20261109-1" />
 </head>
-<body>
+<body class="academy-application">
   <div class="app-bg">
     <span class="orb orb-one"></span>
     <span class="orb orb-two"></span>
